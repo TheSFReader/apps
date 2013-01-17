@@ -2,6 +2,7 @@
 
 	<h1 class="heading">Library</h1>
 	Sort by : <?php 
+	$thisLink = $_['thisLink'];
 	$newestLink = $_['newestLink'];
 	$authorsLink = $_['authorsLink'];
 	print_unescaped("<a href=\"$newestLink\">Newest</a> ");
@@ -16,6 +17,8 @@
 		}
 		print_unescaped("<BR/>");
 	}
+	
+	print_unescaped("<a href=\"$thisLink\">this</a> ");
 ?>
 </div>
 

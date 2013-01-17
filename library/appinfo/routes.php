@@ -44,8 +44,15 @@ $this->create('library_index', '/')->action(
 		}
 );
 
+$this->create('library_opds', '/opds')->action(
+		function($params){
+			App::main('ItemController', 'opds', $params, new DIContainer());
+		}
+);
+
 $this->create('library_index_sort', '/sortby/{sortby}')->action(
 		function($params){
+			
 			App::main('ItemController', 'index', $params, new DIContainer());
 		}
 );

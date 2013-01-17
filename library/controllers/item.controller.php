@@ -105,9 +105,15 @@ class ItemController extends \OCA\AppFramework\Controller {
 		
 
 		$templateName = 'main';
+		$paramsIn =  $this->getAllParams();
+		$routeName = $paramsIn['_route'];
+		// unset the _route param so that it is not re-sent
+		unset($paramsIn['_route']);
+		$thisLink = $this->api->linkToRoute($routeName, $paramsIn);
+		
 		$params = array(
 			'somesetting' => $this->api->getSystemValue('somesetting'),
-			'item' => $item,
+			'thisLink' => $thisLink,
 			'indexLink' => $this->api->linkToRoute('library_index'),
 			'newestLink' => $this->api->linkToRoute('library_index_sort', array('sortby' => 'newest')),
 			'authorsLink' => $this->api->linkToRoute('library_index_sort', array('sortby' => 'author')),
@@ -115,6 +121,49 @@ class ItemController extends \OCA\AppFramework\Controller {
 			'test' => $this->params('test')
 		);
 		return $this->render($templateName, $params);
+	}
+	
+	/**
+	 * @CSRFExemption
+	 * @IsAdminExemption
+	 * @IsSubAdminExemption
+	 *
+	 * @brief renders the index page
+	 * @return an instance of a Response implementation
+	 */
+	public function opds(){
+	
+		// your own stuff
+		$this->api->addStyle('style');
+	
+		$epubs = \OC_FileCache::searchByMime('application', 'epub+zip');
+		$ids = array();
+		foreach($epubs as $file) {
+			$ebooks[] = new EBook($this->api, $file);
+		}
+	
+	
+		$sortby = $this->params('sortby');
+		if($sortby !== null) {
+			$functionName = 'OCA\\AppLibrary\\cmp' . ucfirst($sortby);
+	
+			if(function_exists($functionName))
+				usort($ebooks,$functionName);
+		}
+	
+		
+	
+		$templateName = 'main';
+		$params = array(
+				'somesetting' => $this->api->getSystemValue('somesetting'),
+				'item' => $item,
+				'indexLink' => $this->api->linkToRoute('library_index'),
+				'newestLink' => $this->api->linkToRoute('library_index_sort', array('sortby' => 'newest')),
+				'authorsLink' => $this->api->linkToRoute('library_index_sort', array('sortby' => 'author')),
+				'ebooks' => $ebooks,
+				'test' => $this->params('test')
+		);
+		return $this->render($templateName, $params,null);
 	}
 
 
