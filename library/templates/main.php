@@ -1,8 +1,12 @@
 <div id="app">
 
 	<h1 class="heading">Library</h1>
+	Sort by : <?php 
+	$newestLink = $_['newestLink'];
+	$authorsLink = $_['authorsLink'];
+	print_unescaped("<a href=\"$newestLink\">Newest</a> ");
+	print_unescaped("<a href=\"$authorsLink\">Author Name</a> <BR/>");
 
-	<?php
 	foreach ($_['ebooks'] as $ebook) {
 		$link = $ebook->DetailsLink();
 		print_unescaped("<a href=\"$link\">");  p ($ebook->Title()); print_unescaped( "</a>"); 

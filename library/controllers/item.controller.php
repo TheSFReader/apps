@@ -108,8 +108,10 @@ class ItemController extends \OCA\AppFramework\Controller {
 		$params = array(
 			'somesetting' => $this->api->getSystemValue('somesetting'),
 			'item' => $item,
-				'indexLink' => $this->api->linkToRoute('library_index'),
-				'ebooks' => $ebooks,
+			'indexLink' => $this->api->linkToRoute('library_index'),
+			'newestLink' => $this->api->linkToRoute('library_index_sort', array('sortby' => 'newest')),
+			'authorsLink' => $this->api->linkToRoute('library_index_sort', array('sortby' => 'author')),
+			'ebooks' => $ebooks,
 			'test' => $this->params('test')
 		);
 		return $this->render($templateName, $params);
