@@ -184,8 +184,8 @@ class API {
 	 * Returns the URL for a route
 	 * @return the url
 	 */
-	public function linkToRoute($routeName){
-		return \OC_Helper::linkToRoute($routeName);
+	public function linkToRoute($routeName, $params = array()){
+		return \OC_Helper::linkToRoute($routeName, $params);
 	}
 
 
@@ -193,11 +193,11 @@ class API {
 	 * @brief links to a file
 	 * @deprecated
 	 */
-	public function linkToAbsolute($file, $appName=null){
+	public function linkToAbsolute($file, $appName=null, $params = array()){
 		if($appName === null){
 			$appName = $this->appName;
 		}
-		return \OC_Helper::linkToAbsolute($appName, $file);
+		return \OC_Helper::linkToAbsolute($appName, $file, $params);
 	}
 
 
@@ -246,6 +246,48 @@ class API {
 	 */
 	public function isAppEnabled($appName){
 		\OC_App::isEnabled($appName);
+	}
+	
+	/**
+	 * Returns the internal Id for a file path
+	 * @return the id
+	 */
+	public function getId($path){
+		return \OC_FileCache::getId($path);
+	}
+	
+	/**
+	 * Returns the internal Id for a file path
+	 * @return the id
+	 */
+	public function getPath($id){
+		return \OC_FileCache::getPath($id);
+	}
+	
+	/**
+	 * Returns the local file path
+	 * @return the path
+	 */
+	public function getLocalFile($path){
+		return \OC_Filesystem::getLocalFile($path);
+	}
+	
+	/**
+	 * get the filesystem info from the cache
+	 * @param string path
+	 * @param string root (optional)
+	 * @return array
+	 *
+	 * returns an associative array with the following keys:
+	 * - size
+	 * - mtime
+	 * - ctime
+	 * - mimetype
+	 * - encrypted
+	 * - versioned
+	 */
+	public function getFilesystemInfo($path){
+		return \OC_FileCache::get($path);
 	}
 
 
