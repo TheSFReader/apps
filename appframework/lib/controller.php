@@ -30,7 +30,7 @@ class Controller {
 	protected $api;
 	protected $request;
 
-	private $urlParams;
+	protected $urlParams;
 
 	/**
 	 * @param API $api: an api wrapper instance
@@ -52,7 +52,15 @@ class Controller {
 		$this->urlParams = $urlParams;
 	}
 
-
+	/**
+	 * @brief returns all params that were received, be it from the request (as get or post) or throuh the URL by the route).
+	 * @return array the array with all parameters
+	 */
+	public function getAllParams() {
+		$result = array_merge( $this->request->getParams(), $this->urlParams);
+		return $result;
+	}
+	
 	/**
 	 * @brief lets you access post and get parameters by the index
 	 * @param string $key: the key which you want to access in the URL Parameter
@@ -65,17 +73,17 @@ class Controller {
 	 * @return: the content of the array
 	 */
 	public function params($key, $default=null){
-		$postValue = $this->request->getPOST($key);
-		$getValue = $this->request->getGET($key);
-
+		
 		if(array_key_exists($key, $this->urlParams)){
 			return $this->urlParams[$key];
 		}
 
+		$postValue = $this->request->getPOST($key);
 		if($postValue !== null){
 			return $postValue;
 		}
-
+		
+		$getValue = $this->request->getGET($key);
 		if($getValue !== null){
 			return $getValue;
 		}
