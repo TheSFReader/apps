@@ -44,9 +44,30 @@ $this->create('library_index', '/')->action(
 		}
 );
 
+/*
+$this->create('library_index2', '/{sortby}')->defaults(array('sortby' => 'newest'))->action(
+		function($params){
+			\OC_Log::write("Library",var_export($params,true),4);
+			App::main('ItemController', 'index', $params, new DIContainer());
+		}
+);*/
+
+
 $this->create('library_opds', '/opds')->action(
 		function($params){
 			App::main('ItemController', 'opds', $params, new DIContainer());
+		}
+);
+
+$this->create('library_opds_all', '/opds/all')->action(
+		function($params){
+			App::main('ItemController', 'opds_all', $params, new DIContainer());
+		}
+);
+
+$this->create('library_opds_new', '/opds/new')->action(
+		function($params){
+			App::main('ItemController', 'opds_new', $params, new DIContainer());
 		}
 );
 

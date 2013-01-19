@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <info>
-	<id>apptemplate_advanced</id>
-	<name>Advanced App Template</name>
-	<description>App Template which uses the app framework</description>
+	<id>library</id>
+	<name>Library</name>
+	<description>Library application, which uses the app framework</description>
 	<version>1.0</version>
 	<licence>AGPL</licence>
 	<author>Bernhard Posselt</author>

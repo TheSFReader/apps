@@ -21,10 +21,27 @@
 *
 */
 
+
+
+
 namespace OCA\AppLibrary;
 
 use OCA\AppFramework\DoesNotExistException as DoesNotExistException;
 use OCA\AppFramework\RedirectResponse as RedirectResponse;
+
+
+# ATOM catalog
+const ATOM_CATALOG = 'application/atom+xml';
+# Common catalog
+const OPDS_MIME_CATALOG = 'application/atom+xml;profile=opds-catalog';
+# Pure navigation feeds
+const OPDS_MIME_NAV = 'application/atom+xml;profile=opds-catalog;kind=navigation';
+# Feeds with acquisition links
+const OPDS_MIME_ACQ = 'application/atom+xml;profile=opds-catalog;kind=acquisition';
+# General format for a book details entry document
+const OPDS_MIME_ENTRY = 'application/atom+xml;type=entry;profile=opds-catalog';
+# OpenSearch
+const OPENSEARCH_MIME = 'application/opensearchdescription+xml';
 
 // EBook Comparison functions for sorting
 function cmpNewest($a, $b)
@@ -109,16 +126,14 @@ class ItemController extends \OCA\AppFramework\Controller {
 		$routeName = $paramsIn['_route'];
 		// unset the _route param so that it is not re-sent
 		unset($paramsIn['_route']);
-		$thisLink = $this->api->linkToRoute($routeName, $paramsIn);
 		
 		$params = array(
-			'somesetting' => $this->api->getSystemValue('somesetting'),
-			'thisLink' => $thisLink,
+			'thisLink' => $this->api->linkToRoute($routeName, $paramsIn),
 			'indexLink' => $this->api->linkToRoute('library_index'),
 			'newestLink' => $this->api->linkToRoute('library_index_sort', array('sortby' => 'newest')),
 			'authorsLink' => $this->api->linkToRoute('library_index_sort', array('sortby' => 'author')),
 			'ebooks' => $ebooks,
-			'test' => $this->params('test')
+				'libraryName' => $this->api->getUserId() .'\'s Library',
 		);
 		return $this->render($templateName, $params);
 	}
@@ -132,38 +147,70 @@ class ItemController extends \OCA\AppFramework\Controller {
 	 * @return an instance of a Response implementation
 	 */
 	public function opds(){
+		$paramsIn =  $this->getAllParams();
+		$routeName = $paramsIn['_route'];
+		// unset the _route param so that it is not re-sent
+		unset($paramsIn['_route']);
+		
+		
+		$templateName = 'opds_index';
+		
+		
+		$params = array(
+			'thisLink' => $this->api->linkToRouteAbsolute($routeName, $paramsIn),
+			'opdsLink' => $this->api->linkToRouteAbsolute('library_opds'),
+			'indexLink' => $this->api->linkToRouteAbsolute('library_index'),
+			'newestLink' => $this->api->linkToRouteAbsolute('library_opds_new'),
+				//FIXME
+			'updateDate' => '2013-01-19T20:56:07Z',		
+			'userName' => $this->api->getUserId(),
+			'userMail' => 'TheSFReader@gmail.com',
+			'libraryName' => $this->api->getUserId() .'\'s Library',
+		);
+		$headers = array();
+		$headers[]= 'Content-Type: '. OPDS_MIME_CATALOG;
+		return $this->render($templateName, $params,false, $headers);
+	}
 	
-		// your own stuff
-		$this->api->addStyle('style');
+	/**
+	 * @CSRFExemption
+	 * @IsAdminExemption
+	 * @IsSubAdminExemption
+	 *
+	 * @brief renders the index page
+	 * @return an instance of a Response implementation
+	 */
+	public function opds_new(){
+		$paramsIn =  $this->getAllParams();
+		$routeName = $paramsIn['_route'];
+		// unset the _route param so that it is not re-sent
+		unset($paramsIn['_route']);
 	
+		
+		$templateName = 'opds_acquisition';
 		$epubs = \OC_FileCache::searchByMime('application', 'epub+zip');
 		$ids = array();
 		foreach($epubs as $file) {
 			$ebooks[] = new EBook($this->api, $file);
 		}
-	
-	
-		$sortby = $this->params('sortby');
-		if($sortby !== null) {
-			$functionName = 'OCA\\AppLibrary\\cmp' . ucfirst($sortby);
-	
-			if(function_exists($functionName))
-				usort($ebooks,$functionName);
-		}
-	
-		
-	
-		$templateName = 'main';
+			
+		usort($ebooks,'OCA\\AppLibrary\\cmpNewest');
+			
 		$params = array(
-				'somesetting' => $this->api->getSystemValue('somesetting'),
-				'item' => $item,
-				'indexLink' => $this->api->linkToRoute('library_index'),
-				'newestLink' => $this->api->linkToRoute('library_index_sort', array('sortby' => 'newest')),
-				'authorsLink' => $this->api->linkToRoute('library_index_sort', array('sortby' => 'author')),
+				'thisLink' => $this->api->linkToRouteAbsolute($routeName, $paramsIn),
+				'opdsLink' => $this->api->linkToRouteAbsolute('library_opds'),
+				'indexLink' => $this->api->linkToRouteAbsolute('library_index'),
+				'newestLink' => $this->api->linkToRouteAbsolute('library_opds_new'),
 				'ebooks' => $ebooks,
-				'test' => $this->params('test')
+				//FIXME
+				'updateDate' => '2013-01-19T20:56:07Z',
+				'userName' => $this->api->getUserId(),
+				'userMail' => 'TheSFReader@gmail.com',
+				'libraryName' => $this->api->getUserId() .'\'s Library',
 		);
-		return $this->render($templateName, $params,null);
+		$headers = array();
+		$headers[]= 'Content-Type: '. OPDS_MIME_CATALOG;
+		return $this->render($templateName, $params,false, $headers);
 	}
 
 

@@ -188,7 +188,25 @@ class API {
 		return \OC_Helper::linkToRoute($routeName, $params);
 	}
 
-
+	/**
+	 * Returns the Absolute URL for a route
+	 * @return the url
+	 */
+	public function linkToRouteAbsolute($routeName, $params = array()){
+		return \OC_Helper::makeURLAbsolute (\OC_Helper::linkToRoute($routeName, $params));
+	}
+	
+	/**
+	 * @brief Makes an $url absolute
+	 * @param string $url the url
+	 * @return string the absolute url
+	 *
+	 * Returns a absolute url to the given url.
+	 */
+	public function makeURLAbsolute($url){
+		return \OC_Helper::makeURLAbsolute ($url);
+	}
+	
 	/**
 	 * @brief links to a file
 	 * @deprecated

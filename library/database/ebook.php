@@ -14,6 +14,7 @@ Class EBook {
 	protected $date;
 	protected $formats;
 	protected $epub;
+	protected $isbn;
 	
 	function __construct($api, $path) {
 		
@@ -37,6 +38,10 @@ Class EBook {
 		
 	}
 	
+	public function Id(){
+		return $this->id;
+	}
+	
 	public function Title($title = false) {
 		if($title!== false) {
 			$this->title = $title;
@@ -44,6 +49,16 @@ Class EBook {
 		if($this->title === null)
 			$this->title=$this->epub->Title();
 		return $this->title;
+	}
+	
+	
+	public function ISBN($isbn = false) {
+		if($isbn!== false) {
+			$this->isbn = $isbn;
+		}
+		if($this->isbn === null)
+			$this->isbn=$this->epub->ISBN();
+		return $this->isbn;
 	}
 	
 	public function Authors($authors = false) {
@@ -99,23 +114,5 @@ Class EBook {
 		return $this->api->linkToRoute('library_thumbnail', array('id' => $this->id));
 	}
 	
-	public static function cmpNewest($a, $b)
-	{
-		//throw new \Exception(var_dump($a));
-			$al = $a->mtime;
-			$bl = $b->mtime;
-			if ($al === $bl) {
-				return 0;
-			}
-			return ($al < $bl) ? +1 : -1;
-	}
-	public static function cmpAuthor($a, $b)
-	{
-		$al = reset($a->Authors());
-		$bl = reset($b->Authors());
-		if ($al[0] === $bl[0]) {
-			return 0;
-		}
-		return ($al[0] > $bl[0]) ? +1 : -1;
-	}
+	
 }
