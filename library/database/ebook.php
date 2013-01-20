@@ -11,12 +11,16 @@ Class EBook {
 	protected $description;
 	protected $subjects;
 	protected $mtime;
+	protected $updated;
 	protected $date;
 	protected $formats;
 	protected $epub;
 	protected $isbn;
 	protected $language;
 	protected $publisher;
+	protected $detailsLink;
+	protected $coverLink;
+	protected $thumbnailLink;
 	
 	function __construct($api, $path) {
 		
@@ -31,11 +35,19 @@ Class EBook {
 		$localFile = $this->api->getLocalFile($this->path);
 		$info = $this->api->getFilesystemInfo($this->path);
 		$this->mtime = $info['mtime'];
+		$dt = new \DateTime();
+		$dt->setTimestamp($this->mtime);
+		$this->updated = $dt->format(\DateTime::ATOM);
+		
 		
 		//FIXME
-		$downloadURL=\OCP\Util::linkTo('files', 'ajax/download.php'). '?files='.$path;
+		$downloadURL=$this->api->linkToAbsolute('ajax/download.php','files', array('files' => $path));
 		$this->epub = new \EPub($localFile);
 		$this->formats = array('epub'=>$downloadURL);
+		
+		$this->thumbnailLink = $this->api->linkToRouteAbsolute('library_thumbnail', array('id' => $this->id));
+		$this->coverLink = $this->api->linkToRouteAbsolute('library_cover', array('id' => $this->id));
+		$this->detailsLink = $this->api->linkToRouteAbsolute('library_details', array('id' => $this->id));
 		
 		
 	}
@@ -122,16 +134,24 @@ Class EBook {
 		return $this->mtime;
 	}
 	
+	public function Updated() {
+		return $this->updated;
+	}
+	
 	public function DetailsLink() {
-		return $this->api->linkToRoute('library_details', array('id' => $this->id));
+		return $this->detailsLink;
 	}
 	
 	public function CoverLink() {
-		return $this->api->linkToRoute('library_cover', array('id' => $this->id));
+		return $this->coverLink;
 	}
 	
 	public function ThumbnailLink() {
-		return $this->api->linkToRoute('library_thumbnail', array('id' => $this->id));
+		return $this->thumbnailLink;
+	}
+	
+	public function Formats() {
+		return  $this->formats;
 	}
 	
 	

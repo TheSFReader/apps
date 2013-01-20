@@ -190,20 +190,29 @@ class ItemController extends \OCA\AppFramework\Controller {
 		$templateName = 'opds_acquisition';
 		$epubs = \OC_FileCache::searchByMime('application', 'epub+zip');
 		$ids = array();
+		$currentTime = new \DateTime();
+		$lastMTime = null;
 		foreach($epubs as $file) {
-			$ebooks[] = new EBook($this->api, $file);
+			$ebook = new EBook($this->api, $file);
+			$ebooks[] = $ebook;
+			// Extract the time (for now)
+			$thismtime = $ebook->MTime(); 
+			if($lastMTime == null || $thismtime > $lastMTime)
+				$lastMTime = $thismtime;
+		}
+		if($lastMTime!== null) {
+			$currentTime->setTimestamp($lastMTime);
 		}
 			
 		usort($ebooks,'OCA\\AppLibrary\\cmpNewest');
-			
+	
 		$params = array(
 				'thisLink' => $this->api->linkToRouteAbsolute($routeName, $paramsIn),
 				'opdsLink' => $this->api->linkToRouteAbsolute('library_opds'),
 				'indexLink' => $this->api->linkToRouteAbsolute('library_index'),
 				'newestLink' => $this->api->linkToRouteAbsolute('library_opds_new'),
 				'ebooks' => $ebooks,
-				//FIXME
-				'updateDate' => '2013-01-19T20:56:07Z',
+				'updateDate' => $currentTime->format(\DateTime::ATOM),
 				'userName' => $this->api->getUserId(),
 				'userMail' => 'TheSFReader@gmail.com',
 				'libraryName' => $this->api->getUserId() .'\'s Library',
