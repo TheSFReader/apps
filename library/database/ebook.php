@@ -15,6 +15,8 @@ Class EBook {
 	protected $formats;
 	protected $epub;
 	protected $isbn;
+	protected $language;
+	protected $publisher;
 	
 	function __construct($api, $path) {
 		
@@ -95,6 +97,24 @@ Class EBook {
 		if($this->date === null)
 			$this->date=$this->epub->Date();
 		return $this->date;
+	}
+	
+	public function Language($language = false) {
+		if($language!== false) {
+			$this->language = $language;
+		}
+		if($this->language === null)
+			$this->language=$this->epub->Language();
+		return $this->language;
+	}
+	
+	public function Publisher($publisher = false) {
+		if($publisher!== false) {
+			$this->publisher = $publisher;
+		}
+		if($this->publisher === null)
+			$this->publisher=$this->epub->Publisher();
+		return $this->publisher;
 	}
 	
 	public function Mtime() {
