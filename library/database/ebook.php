@@ -4,8 +4,8 @@ namespace OCA\AppLibrary;
 
 Class EBook {
 	protected $api;
-	var $id;
-	var $path;
+	protected $fileId;
+	protected $path;
 	protected $title;
 	protected $authors;
 	protected $description;
@@ -26,12 +26,13 @@ Class EBook {
 		
 		$this->api = $api;
 		$this->path = $path;
-		$this->id = $this->api->getId($path);
+		$this->fileId = $this->api->getId($path);
 		
-		if($this->id === -1) {
+		if($this->fileId === -1) {
 			$this->path = $this->api->getPath($path);
-			$this->id = $path;
+			$this->fileId = $path;
 		}
+		$id=$this->fileId;
 		$localFile = $this->api->getLocalFile($this->path);
 		$info = $this->api->getFilesystemInfo($this->path);
 		$this->mtime = $info['mtime'];
@@ -41,13 +42,13 @@ Class EBook {
 		
 		
 		//FIXME
-		$downloadURL=$this->api->linkToAbsolute('ajax/download.php','files', array('files' => $path));
+		$downloadURL=$this->api->linkToAbsolute('ajax/download.php','files', array('files' => $this->path));
 		$this->epub = new \EPub($localFile);
 		$this->formats = array('epub'=>$downloadURL);
 		
-		$this->thumbnailLink = $this->api->linkToRouteAbsolute('library_thumbnail', array('id' => $this->id));
-		$this->coverLink = $this->api->linkToRouteAbsolute('library_cover', array('id' => $this->id));
-		$this->detailsLink = $this->api->linkToRouteAbsolute('library_details', array('id' => $this->id));
+		$this->thumbnailLink = $this->api->linkToRouteAbsolute('library_thumbnail', array('id' => $this->fileId));
+		$this->coverLink = $this->api->linkToRouteAbsolute('library_cover', array('id' => $this->fileId));
+		$this->detailsLink = $this->api->linkToRouteAbsolute('library_details', array('id' => $this->fileId));
 		
 		
 	}
@@ -130,7 +131,6 @@ Class EBook {
 	}
 	
 	public function Mtime() {
-		
 		return $this->mtime;
 	}
 	
