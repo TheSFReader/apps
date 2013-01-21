@@ -48,9 +48,7 @@
 	<?php $cover = $ebook->CoverLink(); if($cover !== null) {print_unescaped("<link type=\"image/png\" rel=\"http://opds-spec.org/image\" href=\"$cover\"/>\n"); } ?>
 	<?php $thumbnail = $ebook->ThumbnailLink(); if($thumbnail !== null) {print_unescaped("<link type=\"image/png\" rel=\"http://opds-spec.org/image/thumbnail\" href=\"$thumbnail\"/>\n"); } ?>
 	<?php $details = $ebook->DetailsLink(); if($details !== null) {print_unescaped("<link type=\"text/html\" title=\"Details\" rel=\"alternate\" href=\"$details\"/>\n"); } ?>
-	<?php $formats=$ebook->Formats(); $epubFormat = $formats['epub'];if(isset($epubFormat)) {
-	print_unescaped("<link rel=\"http://opds-spec.org/acquisition\" type=\"application/epub+zip\" href=\"$epubFormat\"/>"); }
-	?>
+	<?php $formats=$ebook->Formats(); $epubFormat = $formats['epub'];if(isset($epubFormat)) { print_unescaped("<link rel=\"http://opds-spec.org/acquisition\" type=\"application/epub+zip\" href=\"$epubFormat\"/>"); } ?>
 		<!-- 
 	<dcterms:extent>135 pages</dcterms:extent>
 	<dcterms:extent>3,8 Mo</dcterms:extent>

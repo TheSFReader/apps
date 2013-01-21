@@ -133,7 +133,8 @@ class ItemController extends \OCA\AppFramework\Controller {
 			'newestLink' => $this->api->linkToRoute('library_index_sort', array('sortby' => 'newest')),
 			'authorsLink' => $this->api->linkToRoute('library_index_sort', array('sortby' => 'author')),
 			'ebooks' => $ebooks,
-				'libraryName' => $this->api->getUserId() .'\'s Library',
+			'libraryName' => $this->api->getUserId() .'\'s Library',
+			'opdsLink' => $this->api->linkToRoute('library_opds'),
 		);
 		return $this->render($templateName, $params);
 	}
