@@ -4,6 +4,7 @@ namespace OCA\AppLibrary;
 
 Class EBook {
 	protected $api;
+	protected $ebookId;
 	protected $fileId;
 	protected $path;
 	protected $title;
@@ -32,7 +33,7 @@ Class EBook {
 			$this->path = $this->api->getPath($path);
 			$this->fileId = $path;
 		}
-		$id=$this->fileId;
+		$this->ebookId=$this->fileId;
 		$localFile = $this->api->getLocalFile($this->path);
 		$info = $this->api->getFilesystemInfo($this->path);
 		$this->mtime = $info['mtime'];
@@ -53,8 +54,12 @@ Class EBook {
 		
 	}
 	
+	public function EBookId(){
+		return $this->ebookId;
+	}
+	
 	public function Id(){
-		return $this->id;
+		return $this->fileId;
 	}
 	
 	public function Title($title = false) {
