@@ -21,8 +21,7 @@
 *
 */
 
-
-require_once \OC_App::getAppPath('library') . '/appinfo/classpath.php';
+namespace OCA\Library;
 
 
 \OCP\App::registerAdmin('library', 'admin/settings');

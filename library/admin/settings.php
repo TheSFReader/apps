@@ -21,12 +21,12 @@
 *
 */
 
-namespace OCA\AppLibrary;
+namespace OCA\Library\Admin;
 
 use OCA\AppFramework\App as App;
 
+use OCA\Library\DependencyInjection\DIContainer as DIContainer;
 
-require_once \OC_App::getAppPath('library') . '/appinfo/classpath.php';
 
 // we need to fetch the output and return it for the admin page. Dont ask why
 ob_start();

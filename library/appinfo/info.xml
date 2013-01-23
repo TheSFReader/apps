@@ -2,7 +2,7 @@
 <info>
 	<id>library</id>
 	<name>Library</name>
-	<description>Library application, which uses the app framework</description>
+	<description>library application</description>
 	<version>1.0</version>
 	<licence>AGPL</licence>
 	<author>Bernhard Posselt</author>

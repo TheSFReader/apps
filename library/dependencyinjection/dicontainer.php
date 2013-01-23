@@ -21,10 +21,16 @@
 *
 */
 
-namespace OCA\AppLibrary;
+namespace OCA\Library\DependencyInjection;
+
+use OCA\AppFramework\DependencyInjection\DIContainer as BaseContainer;
+
+use OCA\Library\Controller\ItemController as ItemController;
+use OCA\Library\Controller\SettingsController as SettingsController;
+use OCA\Library\Db\ItemMapper as ItemMapper;
 
 
-class DIContainer extends \OCA\AppFramework\DIContainer {
+class DIContainer extends BaseContainer {
 
 
 	/**

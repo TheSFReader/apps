@@ -21,12 +21,11 @@
 *
 */
 
-namespace OCA\AppLibrary;
+namespace OCA\Library;
 
 use \OCA\AppFramework\App as App;
 
-
-require_once \OC_App::getAppPath('library') . '/appinfo/classpath.php';
+use \OCA\Library\DependencyInjection\DIContainer as DIContainer;
 
 
 /*************************
@@ -36,12 +35,10 @@ require_once \OC_App::getAppPath('library') . '/appinfo/classpath.php';
 /**
  * Normal Routes
  */
-
-
 $this->create('library_index', '/')->action(
-		function($params){
-			App::main('ItemController', 'index', $params, new DIContainer());
-		}
+	function($params){
+		App::main('ItemController', 'index', $params, new DIContainer());
+	}
 );
 
 /*

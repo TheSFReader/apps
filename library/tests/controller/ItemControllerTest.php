@@ -21,28 +21,19 @@
 *
 */
 
-namespace OCA\AppLibrary;
+namespace OCA\Library\Controller;
 
-use OCA\AppFramework\Request as Request;
-use OCA\AppFramework\DoesNotExistException as DoesNotExistException;
+use OCA\AppFramework\Http\Request as Request;
+use OCA\AppFramework\Db\DoesNotExistException as DoesNotExistException;
+use OCA\AppFramework\Utility\ControllerTestUtility as ControllerTestUtility;
 
-// get abspath of file directory
-$path = realpath( dirname( __FILE__ ) ) . '/';
-
-require_once($path . "../../../appframework/lib/request.php");
-require_once($path . "../../../appframework/lib/doesnotexist.exception.php");
-require_once($path . "../../../appframework/lib/responses/response.php");
-require_once($path . "../../../appframework/lib/responses/json.response.php");
-require_once($path . "../../../appframework/lib/responses/template.response.php");
-require_once($path . "../../../appframework/lib/controller.php");
-
-require_once($path . "../../database/item.php");
-require_once($path . "../../controllers/item.controller.php");
-
-require_once($path . "ControllerTest.php");
+use OCA\Library\Db\Item as Item;
 
 
-class ItemControllerTest extends ControllerTest {
+require_once(__DIR__ . "/../classloader.php");
+
+
+class ItemControllerTest extends ControllerTestUtility {
 
 
 	public function testRedirectToIndexAnnotations(){
@@ -66,15 +57,7 @@ class ItemControllerTest extends ControllerTest {
 
 
 	public function testIndexGetSystemValue(){
-		// create mocks
-		$apiMethods = array(
-			'getUserId', 
-			'getSystemValue',
-			'add3rdPartyScript',
-			'addStyle',
-			'addScript'
-		);
-		$api = $this->getAPIMock($apiMethods);
+		$api = $this->getAPIMock();
 		$api->expects($this->any())
 					->method('getSystemValue')
 					->with($this->equalTo('somesetting'))
@@ -91,15 +74,7 @@ class ItemControllerTest extends ControllerTest {
 
 
 	public function testIndexItemExists(){
-		// create mocks
-		$apiMethods = array(
-			'getUserId', 
-			'getSystemValue',
-			'add3rdPartyScript',
-			'addStyle',
-			'addScript'
-		);
-		$api = $this->getAPIMock($apiMethods);
+		$api = $this->getAPIMock();
 		$api->expects($this->any())
 					->method('getUserId')
 					->will($this->returnValue('richard'));
@@ -124,15 +99,7 @@ class ItemControllerTest extends ControllerTest {
 
 
 	public function testIndexItemDoesNotExist(){
-		// create mocks
-		$apiMethods = array(
-			'getUserId', 
-			'getSystemValue',
-			'add3rdPartyScript',
-			'addStyle',
-			'addScript'
-		);
-		$api = $this->getAPIMock($apiMethods);
+		$api = $this->getAPIMock();
 		$api->expects($this->any())
 					->method('getUserId')
 					->will($this->returnValue('richard'));
@@ -168,7 +135,7 @@ class ItemControllerTest extends ControllerTest {
 		$request = new Request(array(), $post);
 
 		// create an api mock object
-		$api = $this->getAPIMock(array('setSystemValue'));
+		$api = $this->getAPIMock();
 
 		// expects to be called once with the method
 		// setSystemValue('somesetting', 'this is a test')
@@ -177,7 +144,7 @@ class ItemControllerTest extends ControllerTest {
 					->with(	$this->equalTo('somesetting'),
 							$this->equalTo('this is a test'));
 
-		// we want to return the appname apptemplate_advanced when this method
+		// we want to return the appname library when this method
 		// is being called
 		$api->expects($this->any())
 					->method('getAppName')

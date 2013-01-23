@@ -20,7 +20,7 @@
 *
 */
 
-namespace OCA\AppLibrary;
+namespace OCA\Library\Db;
 
 
 class Item {

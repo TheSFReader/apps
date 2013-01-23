@@ -1,10 +1,12 @@
 <?php
 
-namespace OCA\AppLibrary;
+namespace OCA\Library\Lib;
+
+use \OCA\AppFramework\Http\Response as Response;
 
 
 //FIXME This would need to be API ified.
-class Cover extends \OCA\AppFramework\Response {
+class Cover extends Response {
 	protected $image;
 	
 	function __construct($image) {

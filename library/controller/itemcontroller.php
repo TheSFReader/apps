@@ -21,14 +21,15 @@
 *
 */
 
+namespace OCA\Library\Controller;
 
+use OCA\AppFramework\Controller\Controller as Controller;
+use OCA\AppFramework\Db\DoesNotExistException as DoesNotExistException;
+use OCA\AppFramework\Http\RedirectResponse as RedirectResponse;
+use OCA\Library\Db\EBook as EBook;
 
-
-namespace OCA\AppLibrary;
-
-use OCA\AppFramework\DoesNotExistException as DoesNotExistException;
-use OCA\AppFramework\RedirectResponse as RedirectResponse;
-
+use OCA\Library\Db\Item as Item;
+use OCA\Library\Lib\Cover as Cover;
 
 # ATOM catalog
 const ATOM_CATALOG = 'application/atom+xml';
@@ -65,7 +66,7 @@ function cmpAuthor($a, $b)
 	return ($al[0] > $bl[0]) ? +1 : -1;
 }
 
-class ItemController extends \OCA\AppFramework\Controller {
+class ItemController extends Controller {
 	
 
 	/**
@@ -114,7 +115,7 @@ class ItemController extends \OCA\AppFramework\Controller {
 		
 		$sortby = $this->params('sortby');
 		if($sortby !== null) {
-			$functionName = 'OCA\\AppLibrary\\cmp' . ucfirst($sortby);
+			$functionName = 'OCA\\Library\\Controller\cmp' . ucfirst($sortby);
 				
 			if(function_exists($functionName))
 				usort($ebooks,$functionName);

@@ -1,6 +1,8 @@
 <?php
 
-namespace OCA\AppLibrary;
+namespace OCA\Library\Db;
+
+require_once __DIR__ . '/../3rdparty/php-epub-meta-master/epub.php';
 
 Class EBook {
 	protected $api;

@@ -21,9 +21,12 @@
 *
 */
 
-namespace OCA\AppLibrary;
+namespace OCA\Library\Controller;
 
-class SettingsController extends \OCA\AppFramework\Controller {
+use OCA\AppFramework\Controller\Controller as Controller;
+
+
+class SettingsController extends Controller {
 	
 
 	/**
