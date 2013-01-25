@@ -175,7 +175,7 @@ class API {
 	 * @param string $tableName: the name of the table where we inserted the item
 	 * @return the id of the inserted element
 	 */
-	public function getInsertId($tableName){
+	public function getInsertId($tableName=null){
 		return \OCP\DB::insertid($tableName);
 	}
 
