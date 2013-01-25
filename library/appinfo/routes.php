@@ -83,7 +83,6 @@ $this->create('library_index_sort_paginated', '/sortby/{sortby}/{page}')->action
 
 $this->create('library_details', '/ebook/{id}')->action(
 		function($params){
-			\OC_Log::write('details',print_r($params,TRUE),4);
 			App::main('ItemController', 'details', $params, new DIContainer());
 		}
 );

@@ -34,4 +34,89 @@
 			</field>
 		</declaration>
 	</table>
+		<table>
+		<name>*dbprefix*library_ebooks</name>
+		<declaration>
+			<field>				
+				<name>id</name>
+				<type>integer</type>
+				<default>0</default>
+				<notnull>true</notnull>
+					<autoincrement>1</autoincrement>
+				<length>4</length>
+			</field>
+			<field>				
+				<name>fileid</name>
+				<type>integer</type>
+				<default>-1</default>
+				<length>4</length>
+			</field>
+			
+			<field>
+				<name>authors</name>
+				<type>clob</type>
+			</field>
+			<field>
+				<name>filepath</name>
+				<type>clob</type>
+				<notnull>true</notnull>
+			</field>
+			<field>
+				<name>title</name>
+				<type>text</type>
+				<length>100</length>
+			</field>
+			<!-- 
+			<field>
+				<name>subjects</name>
+				<type>text</type>
+				<length>200</length>
+			</field>
+			<field>
+				<name>mtime</name>
+				<type>integer</type>
+				<length>10</length>
+			</field>
+			<field>
+				<name>updated</name>
+				<type>text</type>
+				<length>30</length>
+			</field>
+			<field>
+				<name>description</name>
+				<type>clob</type>
+			</field>
+			<field>
+				<name>isbn</name>
+				<type>text</type>
+				<length>20</length>
+			</field>
+			<field>
+				<name>language</name>
+				<type>text</type>
+				<length>20</length>
+			</field>
+			<field>
+				<name>publisher</name>
+				<type>text</type>
+				<length>20</length>
+			</field>-->
+			<!--
+	//protected $authors;
+	//protected $description;
+	//protected $subjects;
+	protected $mtime;
+	protected $updated;
+	protected $date;
+	protected $formats;
+	protected $epub;
+	protected $isbn;
+	protected $language;
+	protected $publisher;
+	protected $detailsLink;
+	protected $coverLink;
+	protected $thumbnailLink;
+	-->
+		</declaration>
+	</table>
 </database>

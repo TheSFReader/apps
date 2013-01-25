@@ -8,7 +8,11 @@
 	$thisLink = $_['thisLink'];
 	$newestLink = $_['newestLink'];
 	$authorsLink = $_['authorsLink'];
+	$titleLink = $_['titleLink'];
+	$publisherLink = $_['publisherLink'];
 	print_unescaped("<a href=\"$newestLink\">Newest</a>, ");
+	print_unescaped("<a href=\"$titleLink\">Title</a>, ");
+	print_unescaped("<a href=\"$publisherLink\">Publisher</a>, ");
 	print_unescaped("<a href=\"$authorsLink\">Author Name</a> <BR/>");
 
 	foreach ($_['ebooks'] as $ebook) {

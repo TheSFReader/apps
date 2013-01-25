@@ -66,6 +66,28 @@ function cmpAuthor($a, $b)
 	return ($al[0] > $bl[0]) ? +1 : -1;
 }
 
+function cmpTitle($a, $b)
+{
+	//throw new \Exception(var_dump($a));
+	$al = $a->Title();
+	$bl = $b->Title();
+	if ($al === $bl) {
+		return 0;
+	}
+	return ($al > $bl) ? +1 : -1;
+}
+
+function cmpPublisher($a, $b)
+{
+	//throw new \Exception(var_dump($a));
+	$al = $a->Publisher();
+	$bl = $b->Publisher();
+	if ($al === $bl) {
+		return 0;
+	}
+	return ($al > $bl) ? +1 : -1;
+}
+
 class ItemController extends Controller {
 	
 
@@ -106,6 +128,7 @@ class ItemController extends Controller {
 		// your own stuff
 		$this->api->addStyle('style');
 
+		//FIXME
 		$epubs = \OC_FileCache::searchByMime('application', 'epub+zip');
 		$ids = array();
 		foreach($epubs as $file) {
@@ -133,6 +156,8 @@ class ItemController extends Controller {
 			'indexLink' => $this->api->linkToRoute('library_index'),
 			'newestLink' => $this->api->linkToRoute('library_index_sort', array('sortby' => 'newest')),
 			'authorsLink' => $this->api->linkToRoute('library_index_sort', array('sortby' => 'author')),
+			'titleLink' => $this->api->linkToRoute('library_index_sort', array('sortby' => 'title')),
+			'publisherLink' => $this->api->linkToRoute('library_index_sort', array('sortby' => 'publisher')),
 			'ebooks' => $ebooks,
 			'libraryName' => $this->api->getUserId() .'\'s Library',
 			'opdsLink' => $this->api->linkToRoute('library_opds'),
@@ -206,7 +231,7 @@ class ItemController extends Controller {
 			$currentTime->setTimestamp($lastMTime);
 		}
 			
-		usort($ebooks,'OCA\\AppLibrary\\cmpNewest');
+		usort($ebooks,'OCA\Library\Controller\cmpNewest');
 	
 		$params = array(
 				'thisLink' => $this->api->linkToRouteAbsolute($routeName, $paramsIn),

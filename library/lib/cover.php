@@ -5,6 +5,8 @@ namespace OCA\Library\Lib;
 use \OCA\AppFramework\Http\Response as Response;
 
 
+require_once __DIR__ . '/../3rdparty/php-epub-meta-master/epub.php';
+
 //FIXME This would need to be API ified.
 class Cover extends Response {
 	protected $image;

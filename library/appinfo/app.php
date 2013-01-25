@@ -47,3 +47,7 @@ namespace OCA\Library;
 	'name' => \OC_L10N::get('library')->t('Library') 
 	
 ));
+
+\OCP\Util::connectHook(\OC_Filesystem::CLASSNAME, \OC_Filesystem::signal_post_write, 'OCA\Library\Lib\HookHandler', 'writeFile');
+\OCP\Util::connectHook(\OC_Filesystem::CLASSNAME, \OC_Filesystem::signal_delete, 'OCA\Library\Lib\HookHandler', 'removeFile');
+\OCP\Util::connectHook(\OC_Filesystem::CLASSNAME, \OC_Filesystem::signal_post_rename, "OCA\Library\Lib\HookHandler", "renameFile");
