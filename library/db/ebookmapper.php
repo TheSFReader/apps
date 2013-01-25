@@ -49,6 +49,7 @@ class EBookMapper extends Mapper {
 	public function find($id){
 		$row = $this->findQuery($this->tableName, $id);
 		return new EBook($api, $row);
+		
 	}
 
 
@@ -80,7 +81,7 @@ class EBookMapper extends Mapper {
 
 		$entityList = array();
 		while($row = $result->fetchRow()){
-			$entity = new EBook($api,$row);
+			$entity = new EBook($this->api,$row);
 			array_push($entityList, $entity);
 		}
 
@@ -94,10 +95,9 @@ class EBookMapper extends Mapper {
 	 * @return the item with the filled in id
 	 */
 	public function save($ebook){
-		$sql = 'INSERT INTO '. $this->tableName . '(fileid, filepath, authors, title, subjects, 
-					mtime, updated, description, isbn, language, 
-					publisher, detailslink, coverlink, thumbnaillink)'.
-				' VALUES(?, ?, ?)';
+		$sql = 'INSERT INTO '. $this->tableName . '(fileid, filepath, authors, title, subjects, mtime, '.
+				'updated, description, isbn, language, publisher, detailslink, coverlink, thumbnaillink)'.
+				' VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
 		$params = array(
 			$ebook->FileId(),
@@ -119,7 +119,8 @@ class EBookMapper extends Mapper {
 		
 		$this->execute($sql, $params);
 
-		$ebook->setId($this->api->getInsertId());
+		$ebook->setId($this->api->getInsertId($this->tableName));
+		\OC_Log::write("EBookMappe::saver", "Inserted, ID = ".$ebook->getId(),4);
 	}
 
 
@@ -130,8 +131,19 @@ class EBookMapper extends Mapper {
 	public function update($ebook){
 		$sql = 'UPDATE '. $this->tableName . ' SET
 			fileid = ?,
-			user = ?,
-			path = ?
+			filepath = ?,
+			authors = ?,
+			title = ?,
+			subjects = ?,
+			mtime = ?,
+			updated = ?,
+			description = ?,
+			isbn = ?,
+			language = ?,
+			publisher = ?,
+			detailslink = ?,
+			coverlink = ?,
+			thumbnaillink = ?
 			WHERE id = ?';
 
 		$params = array(

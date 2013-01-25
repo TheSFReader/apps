@@ -26,6 +26,9 @@ namespace OCA\Library\Controller;
 use OCA\AppFramework\Controller\Controller as Controller;
 use OCA\AppFramework\Db\DoesNotExistException as DoesNotExistException;
 use OCA\AppFramework\Http\RedirectResponse as RedirectResponse;
+
+
+use OCA\Library\Db\EBookMapper as EBookMapper;
 use OCA\Library\Db\EBook as EBook;
 
 use OCA\Library\Db\Item as Item;
@@ -130,12 +133,13 @@ class ItemController extends Controller {
 
 		//FIXME
 		$epubs = \OC_FileCache::searchByMime('application', 'epub+zip');
-		$ids = array();
 		foreach($epubs as $file) {
 			$ebooks[] = new EBook($this->api, $file);
 		}
-
-		
+/*
+		$ebookMapper = new EBookMapper($this->api);
+		$ebooks = $ebookMapper->findAll();
+		*/
 		$sortby = $this->params('sortby');
 		if($sortby !== null) {
 			$functionName = 'OCA\\Library\\Controller\cmp' . ucfirst($sortby);
@@ -216,7 +220,6 @@ class ItemController extends Controller {
 		
 		$templateName = 'opds_acquisition';
 		$epubs = \OC_FileCache::searchByMime('application', 'epub+zip');
-		$ids = array();
 		$currentTime = new \DateTime();
 		$lastMTime = null;
 		foreach($epubs as $file) {

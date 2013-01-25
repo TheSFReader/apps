@@ -34,7 +34,7 @@
   foreach( $_['ebooks'] as $ebook) { ?>
   <entry>
 	<title><?php p($ebook->Title()); ?></title>
-	<id><?php print_unescaped("/item/".$ebook->Id()); ?></id>
+	<id><?php print_unescaped("/item/".$ebook->getId()); ?></id>
 	<?php printPartialEscape( $ebook->ISBN(), "<dcterms:identifier xsi:type=\"dcterms:URI\">urn:ISBN:", "</dcterms:identifier>\n")?>
 	<?php foreach ($ebook->Authors() as $author) {?>
 <author><name><?php p($author); ?></name></author>

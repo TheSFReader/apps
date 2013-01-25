@@ -28,7 +28,7 @@ Class EBook {
 	function __construct($api, $path) {
 		
 		if(is_array($path)) {
-			fromRow($api,$path);
+			$this->fromRow($api,$path);
 			return;
 		}
 		
@@ -51,38 +51,44 @@ Class EBook {
 		
 		//FIXME
 		$downloadURL=$this->api->linkToAbsolute('ajax/download.php','files', array('files' => $this->path));
-		$this->epub = new \EPub($localFile);
 		$this->formats = array('epub'=>$downloadURL);
 		
 		$this->thumbnailLink = $this->api->linkToRouteAbsolute('library_thumbnail', array('id' => $this->fileId));
 		$this->coverLink = $this->api->linkToRouteAbsolute('library_cover', array('id' => $this->fileId));
 		$this->detailsLink = $this->api->linkToRouteAbsolute('library_details', array('id' => $this->fileId));
 		
+
+		$this->epub = new \EPub($localFile);
+		
 		
 	}
 	
 	function fromRow($api, $row) {
 		$this->api = $api;
-		$this->ebookId =$raw['id'];
-		$this->fileId =$raw['fileid'];
-		$this->path =$raw['filepath'];
-		$this->authors = json_decode ($raw['authors'], true);
-		$this->title =$raw['title'];
-		$this->subjects = json_decode ($raw['subjects'], true);
-		$this->mtime =$raw['mtime'];
-		$this->updated =$raw['updated'];
-		$this->description =$raw['description'];
-		$this->isbn =$raw['isbn'];
-		$this->language =$raw['language'];
-		$this->publisher =$raw['publisher'];
-		$this->detailsLink =$raw['detailsLink'];
-		$this->coverLink =$raw['coverLink'];
-		$this->thumbnailLink =$raw['thumbnailLink'];
+		$this->ebookId =$row['id'];
+		$this->fileId =$row['fileid'];
+		$this->path =$row['filepath'];
+		$this->authors = json_decode ($row['authors'], true);
+		$this->title =$row['title'];
+		$this->subjects = json_decode ($row['subjects'], true);
+		$this->mtime =$row['mtime'];
+		$this->updated =$row['updated'];
+		$this->description =$row['description'];
+		$this->isbn =$row['isbn'];
+		$this->language =$row['language'];
+		$this->publisher =$row['publisher'];
+		$this->detailsLink =$row['detailsLink'];
+		$this->coverLink =$row['coverLink'];
+		$this->thumbnailLink =$row['thumbnailLink'];
 		
 		//FIXME
 		$downloadURL=$this->api->linkToAbsolute('ajax/download.php','files', array('files' => $this->path));
-		$this->epub = new \EPub($localFile);
 		$this->formats = array('epub'=>$downloadURL);
+		
+
+		$localFile = $this->api->getLocalFile($this->path);
+		\OC_Log::write("EBook",$this->path . '/' . $localFile,4 );
+		$this->epub = new \EPub($localFile);
 		
 
 	}
