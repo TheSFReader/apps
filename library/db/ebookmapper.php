@@ -48,7 +48,7 @@ class EBookMapper extends Mapper {
 	 */
 	public function find($id){
 		$row = $this->findQuery($this->tableName, $id);
-		return new Item($row);
+		return new EBook($api, $row);
 	}
 
 
@@ -64,9 +64,9 @@ class EBookMapper extends Mapper {
 
 		$result = $this->execute($sql, $params)->fetchRow();
 		if($result){
-			return new Item($result);
+			return new EBook($api, $result);
 		} else {
-			throw new DoesNotExistException('Item with user id ' . $userId . ' does not exist!');
+			throw new DoesNotExistException('EBook with user id ' . $userId . ' does not exist!');
 		}
 	}
 
@@ -80,8 +80,8 @@ class EBookMapper extends Mapper {
 
 		$entityList = array();
 		while($row = $result->fetchRow()){
-			$entity = new Item($row);
-			array_push($entityList, $row);
+			$entity = new EBook($api,$row);
+			array_push($entityList, $entity);
 		}
 
 		return $entityList;
@@ -93,19 +93,33 @@ class EBookMapper extends Mapper {
 	 * @param Item $item: the item to be saved
 	 * @return the item with the filled in id
 	 */
-	public function save($item){
-		$sql = 'INSERT INTO '. $this->tableName . '(name, user, path)'.
+	public function save($ebook){
+		$sql = 'INSERT INTO '. $this->tableName . '(fileid, filepath, authors, title, subjects, 
+					mtime, updated, description, isbn, language, 
+					publisher, detailslink, coverlink, thumbnaillink)'.
 				' VALUES(?, ?, ?)';
 
 		$params = array(
-			$item->getName(),
-			$item->getUser(),
-			$item->getPath()
+			$ebook->FileId(),
+			$ebook->Path(),
+			json_encode($ebook->Authors()),
+			$ebook->Title(),
+			json_encode($ebook->Subjects()),
+			$ebook->MTime(),
+			$ebook->Updated(),
+			$ebook->Description(),
+			$ebook->Isbn(),
+			$ebook->Language(),
+			$ebook->Publisher(),
+			$ebook->DetailsLink(),
+			$ebook->CoverLink(),
+			$ebook->ThumbnailLink(),
 		);
 
+		
 		$this->execute($sql, $params);
 
-		$item->setId($this->api->getInsertId());
+		$ebook->setId($this->api->getInsertId());
 	}
 
 
@@ -113,18 +127,29 @@ class EBookMapper extends Mapper {
 	 * Updates an item
 	 * @param Item $item: the item to be updated
 	 */
-	public function update($item){
+	public function update($ebook){
 		$sql = 'UPDATE '. $this->tableName . ' SET
-			name = ?,
+			fileid = ?,
 			user = ?,
 			path = ?
 			WHERE id = ?';
 
 		$params = array(
-			$item->getName(),
-			$item->getUser(),
-			$item->getPath(),
-			$item->getId()
+			$ebook->FileId(),
+			$ebook->Path(),
+			json_encode($ebook->Authors()),
+			$ebook->Title(),
+			json_encode($ebook->Subjects()),
+			$ebook->MTime(),
+			$ebook->Updated(),
+			$ebook->Description(),
+			$ebook->Isbn(),
+			$ebook->Language(),
+			$ebook->Publisher(),
+			$ebook->DetailsLink(),
+			$ebook->CoverLink(),
+			$ebook->ThumbnailLink(),
+			$ebook->getId(),
 		);
 
 		$this->execute($sql, $params);

@@ -27,6 +27,11 @@ Class EBook {
 	
 	function __construct($api, $path) {
 		
+		if(is_array($path)) {
+			fromRow($api,$path);
+			return;
+		}
+		
 		$this->api = $api;
 		$this->path = $path;
 		$this->fileId = $this->api->getId($path);
@@ -56,12 +61,52 @@ Class EBook {
 		
 	}
 	
-	public function EBookId(){
+	function fromRow($api, $row) {
+		$this->api = $api;
+		$this->ebookId =$raw['id'];
+		$this->fileId =$raw['fileid'];
+		$this->path =$raw['filepath'];
+		$this->authors = json_decode ($raw['authors'], true);
+		$this->title =$raw['title'];
+		$this->subjects = json_decode ($raw['subjects'], true);
+		$this->mtime =$raw['mtime'];
+		$this->updated =$raw['updated'];
+		$this->description =$raw['description'];
+		$this->isbn =$raw['isbn'];
+		$this->language =$raw['language'];
+		$this->publisher =$raw['publisher'];
+		$this->detailsLink =$raw['detailsLink'];
+		$this->coverLink =$raw['coverLink'];
+		$this->thumbnailLink =$raw['thumbnailLink'];
+		
+		//FIXME
+		$downloadURL=$this->api->linkToAbsolute('ajax/download.php','files', array('files' => $this->path));
+		$this->epub = new \EPub($localFile);
+		$this->formats = array('epub'=>$downloadURL);
+		
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	public function getId(){
 		return $this->ebookId;
 	}
 	
-	public function Id(){
+	public function setId($id){
+		$this->ebookId = $id;
+	}
+	
+	public function FileId(){
 		return $this->fileId;
+	}
+	
+	public function Path(){
+		return $this->path;
 	}
 	
 	public function Title($title = false) {

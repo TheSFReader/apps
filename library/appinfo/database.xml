@@ -66,7 +66,6 @@
 				<type>text</type>
 				<length>100</length>
 			</field>
-			<!-- 
 			<field>
 				<name>subjects</name>
 				<type>text</type>
@@ -100,23 +99,22 @@
 				<name>publisher</name>
 				<type>text</type>
 				<length>20</length>
-			</field>-->
-			<!--
-	//protected $authors;
-	//protected $description;
-	//protected $subjects;
-	protected $mtime;
-	protected $updated;
-	protected $date;
-	protected $formats;
-	protected $epub;
-	protected $isbn;
-	protected $language;
-	protected $publisher;
-	protected $detailsLink;
-	protected $coverLink;
-	protected $thumbnailLink;
-	-->
+			</field>
+			<field>
+				<name>detailsLink</name>
+				<type>text</type>
+				<length>255</length>
+			</field>
+			<field>
+				<name>coverLink</name>
+				<type>text</type>
+				<length>255</length>
+			</field>
+			<field>
+				<name>thumbnailLink</name>
+				<type>text</type>
+				<length>255</length>
+			</field>
 		</declaration>
 	</table>
 </database>
