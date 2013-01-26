@@ -1,10 +1,10 @@
 <?php
 
 /**
-* ownCloud - App Template Example
+* ownCloud - Library plugin
 *
-* @author Bernhard Posselt
-* @copyright 2012 Bernhard Posselt nukeawhale@gmail.com 
+* @author TheSFReader
+* @copyright 2012 TheSFReader thesfreader@gmail.com 
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
@@ -45,7 +45,7 @@ class DIContainer extends BaseContainer {
 		 * CONTROLLERS
 		 */
 		$this['ItemController'] = $this->share(function($c){
-			return new ItemController($c['API'], $c['Request'], $c['ItemMapper']);
+			return new ItemController($c['API'], $c['Request'], $c['EBookMapper']);
 		});
 
 		$this['SettingsController'] = $this->share(function($c){
@@ -56,10 +56,6 @@ class DIContainer extends BaseContainer {
 		/**
 		 * MAPPERS
 		 */
-		$this['ItemMapper'] = $this->share(function($c){
-			return new ItemMapper($c['API']);
-		});
-		
 		$this['EBookMapper'] = $this->share(function($c){
 			return new EBookMapper($c['API']);
 		});

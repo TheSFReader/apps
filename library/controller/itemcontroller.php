@@ -1,10 +1,10 @@
 <?php
 
 /**
-* ownCloud - App Template Example
+* ownCloud - Library plugin
 *
-* @author Bernhard Posselt
-* @copyright 2012 Bernhard Posselt nukeawhale@gmail.com 
+* @author TheSFReader
+* @copyright 2012 TheSFReader thesfreader@gmail.com 
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
@@ -131,15 +131,9 @@ class ItemController extends Controller {
 		// your own stuff
 		$this->api->addStyle('style');
 
-		//FIXME
-		$epubs = \OC_FileCache::searchByMime('application', 'epub+zip');
-		foreach($epubs as $file) {
-			$ebooks[] = new EBook($this->api, $file);
-		}
-/*
 		$ebookMapper = new EBookMapper($this->api);
 		$ebooks = $ebookMapper->findAll();
-		*/
+		
 		$sortby = $this->params('sortby');
 		if($sortby !== null) {
 			$functionName = 'OCA\\Library\\Controller\cmp' . ucfirst($sortby);
@@ -186,7 +180,6 @@ class ItemController extends Controller {
 		
 		$templateName = 'opds_index';
 		
-		
 		$params = array(
 			'thisLink' => $this->api->linkToRouteAbsolute($routeName, $paramsIn),
 			'opdsLink' => $this->api->linkToRouteAbsolute('library_opds'),
@@ -217,14 +210,14 @@ class ItemController extends Controller {
 		// unset the _route param so that it is not re-sent
 		unset($paramsIn['_route']);
 	
-		
 		$templateName = 'opds_acquisition';
-		$epubs = \OC_FileCache::searchByMime('application', 'epub+zip');
+		
+		$ebookMapper = new EBookMapper($this->api);
+		$ebooks = $ebookMapper->findAll();
+		
 		$currentTime = new \DateTime();
 		$lastMTime = null;
-		foreach($epubs as $file) {
-			$ebook = new EBook($this->api, $file);
-			$ebooks[] = $ebook;
+		foreach($ebooks as $ebook) {
 			// Extract the time (for now)
 			$thismtime = $ebook->MTime(); 
 			if($lastMTime == null || $thismtime > $lastMTime)

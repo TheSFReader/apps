@@ -49,7 +49,7 @@
 	<?php $thumbnail = $ebook->ThumbnailLink(); if($thumbnail !== null) {print_unescaped("<link type=\"image/png\" rel=\"http://opds-spec.org/image/thumbnail\" href=\"$thumbnail\"/>\n"); } ?>
 	<?php $details = $ebook->DetailsLink(); if($details !== null) {print_unescaped("<link type=\"text/html\" title=\"Details\" rel=\"alternate\" href=\"$details\"/>\n"); } ?>
 	<?php $formats=$ebook->Formats(); $epubFormat = $formats['epub'];if(isset($epubFormat)) { print_unescaped("<link rel=\"http://opds-spec.org/acquisition\" type=\"application/epub+zip\" href=\"$epubFormat\"/>"); } ?>
-		<!-- 
+	<?php /*	<!-- 
 	<dcterms:extent>135 pages</dcterms:extent>
 	<dcterms:extent>3,8 Mo</dcterms:extent>
 	<category term="FBFIC000000" label="Fiction"/>
@@ -61,6 +61,7 @@
 	</link>
 	<link type="application/atom+xml;type=entry;profile=opds-catalog" title="Entr&#233;e compl&#232;te" rel="alternate" href="http://www.feedbooks.com/item/416961.atom"/>
 	-->
+	*/ ?>
   </entry>
   
   <?php  } ?>

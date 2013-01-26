@@ -1,9 +1,9 @@
 <?php
 /**
-* ownCloud - App Template Example
+* ownCloud - Library plugin
 *
-* @author Bernhard Posselt
-* @copyright 2012 Bernhard Posselt nukeawhale@gmail.com
+* @author TheSFReader
+* @copyright 2012 TheSFReader thesfreader@gmail.com 
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
@@ -71,6 +71,23 @@ class EBookMapper extends Mapper {
 		}
 	}
 
+	/**
+	 * Finds an ebook by local path
+	 * @param string $userId: the id of the user that we want to find
+	 * @throws DoesNotExistException: if the item does not exist
+	 * @return the item
+	 */
+	public function findByPath($path){
+		$sql = 'SELECT * FROM ' . $this->tableName . ' WHERE filepath = ?';
+		$params = array($path);
+	
+		$result = $this->execute($sql, $params)->fetchRow();
+		if($result){
+			return new EBook($api, $result);
+		} else {
+			throw new DoesNotExistException('EBook with path ' . $path . ' does not exist!');
+		}
+	}
 
 	/**
 	 * Finds all Items
@@ -174,6 +191,28 @@ class EBookMapper extends Mapper {
 	 */
 	public function delete($id){
 		$this->deleteQuery($this->tableName, $id);
+	}
+	
+	/**
+	 * delete an ebook, as specified by its local path
+	 * @param string $path the path of the ebook he user whshes to remove
+	 */
+	public function deleteByPath($path){
+		$sql = 'DELETE FROM `' . $this->tableName . '` WHERE `filepath` = ?';
+		$params = array($path);
+		$this->execute($sql, $params);
+	}
+	
+	/**
+	 * change an ebook's path
+	 * @param string $userId: the id of the user that we want to find
+	 * @throws DoesNotExistException: if the item does not exist
+	 * @return the item
+	 */
+	public function updateEbookPath($oldpath,$newpath){
+		$sql = 'UPDATE '. $this->tableName . ' SET filepath = ? WHERE filepath = ?';
+		$params = array($newpath, $oldpath);
+		$this->execute($sql, $params);
 	}
 
 
