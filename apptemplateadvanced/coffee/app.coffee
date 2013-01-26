@@ -9,7 +9,13 @@
 #
 ###
 
-angular.module('AppTemplateAdvanced', ['OC']).config ['$provide', ($provide) ->
+angular.module('AppTemplateAdvanced', ['OC']).config ['$provide', '$interpolateProvider', 
+($provide, $interpolateProvider) ->
+
+	# uses doulbe square brackets instead of double curly braces because twig
+	# already uses doulbe curly braces
+	$interpolateProvider.startSymbol('[[');
+	$interpolateProvider.endSymbol(']]');
 
 	# Use this for configuration values
 	Config =
@@ -22,6 +28,7 @@ angular.module('AppTemplateAdvanced', ['OC']).config ['$provide', ($provide) ->
 	# http:#docs.angularjs.org/api/ng.$route
 	Config.routes =
 		saveNameRoute: 'apptemplate_advanced_ajax_setsystemvalue'
+		getNameRoute: 'apptemplate_advanced_ajax_getsystemvalue'
 
 	return $provide.value('Config', Config)
 ]

@@ -28,20 +28,26 @@ use OCA\AppFramework\Http\Request as Request;
 use OCA\AppFramework\Core\API as API;
 use OCA\AppFramework\Middleware\MiddlewareDispatcher as MiddlewareDispatcher;
 use OCA\AppFramework\Middleware\Security\SecurityMiddleware as SecurityMiddleware;
+use OCA\AppFramework\Middleware\Twig\TwigMiddleware as TwigMiddleware;
 
 
 require_once __DIR__ . '/../3rdparty/Pimple/Pimple.php';
+require_once __DIR__ . '/../3rdparty/Twig/lib/Twig/Autoloader.php';
+\Twig_Autoloader::register();
 
 
 /**
  * This class extends Pimple (http://pimple.sensiolabs.org/) for reusability
- * Also importing a class via classloader is easier than a function
+ * To use this class, extend your own container from this. Should you require it
+ * you can overwrite the dependencies with your own classes by simply redefining
+ * a dependency
  */
 class DIContainer extends \Pimple {
 
 
 	/**
-	 * @param string $appName: the name of the app
+	 * Put your class dependencies in here
+	 * @param string $appName the name of the app
 	 */
 	public function __construct($appName){
 		
@@ -57,15 +63,54 @@ class DIContainer extends \Pimple {
 
 
 		/**
+		 * Twig
+		 */
+		// use this to specify the template directory
+		$this['TwigTemplateDirectory'] = null;
+
+		// if you want to cache the template directory, add this path
+		$this['TwigTemplateCacheDirectory'] = null;
+		
+		// if you want to exchange the template loader, do it here
+		$this['TwigLoader'] = $this->share(function($c){
+			return new \Twig_Loader_Filesystem($c['TwigTemplateDirectory']);
+		});
+
+		$this['Twig'] = $this->share(function($c){
+			$loader = $c['TwigLoader'];
+			if($c['TwigTemplateCacheDirectory'] !== null){
+				return new \Twig_Environment($loader, array(
+					'cache' => $c['TwigTemplateCacheDirectory'],
+					'autoescape' => true
+				));
+			} else {
+				return new \Twig_Environment($loader, array(
+					'autoescape' => true
+				));
+			}
+		});
+
+
+		/**
 		 * Middleware
 		 */
 		$this['SecurityMiddleware'] = $this->share(function($c){
 			return new SecurityMiddleware($c['API']);
 		});
 
+		$this['TwigMiddleware'] = $this->share(function($c){
+			return new TwigMiddleware($c['API'], $c['Twig']);
+		});
+
 		$this['MiddlewareDispatcher'] = $this->share(function($c){
 			$dispatcher = new MiddlewareDispatcher();
 			$dispatcher->registerMiddleware($c['SecurityMiddleware']);
+
+			// only add twigmiddleware if the user set the template directory
+			if($c['TwigTemplateDirectory'] !== null){
+				$dispatcher->registerMiddleware($c['TwigMiddleware']);
+			}
+
 			return $dispatcher;
 		});
 

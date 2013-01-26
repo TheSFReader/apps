@@ -31,16 +31,48 @@
 */
 
 
+/*
+# This file creates instances of classes
+*/
+
+
+(function() {
+
+  angular.module('OC').factory('Publisher', [
+    '_Publisher', function(_Publisher) {
+      return new _Publisher();
+    }
+  ]);
+
+}).call(this);
+
+
+
+/*
+# ownCloud
+#
+# @author Bernhard Posselt
+# Copyright (c) 2012 - Bernhard Posselt <nukeawhale@gmail.com>
+#
+# This file is licensed under the Affero General Public License version 3 or later.
+# See the COPYING-README file
+#
+*/
+
+
 (function() {
 
   angular.module('AppTemplateAdvanced', ['OC']).config([
-    '$provide', function($provide) {
+    '$provide', '$interpolateProvider', function($provide, $interpolateProvider) {
       var Config;
+      $interpolateProvider.startSymbol('[[');
+      $interpolateProvider.endSymbol(']]');
       Config = {
         myParam: 'test'
       };
       Config.routes = {
-        saveNameRoute: 'apptemplate_advanced_ajax_setsystemvalue'
+        saveNameRoute: 'apptemplate_advanced_ajax_setsystemvalue',
+        getNameRoute: 'apptemplate_advanced_ajax_getsystemvalue'
       };
       return $provide.value('Config', Config);
     }
@@ -53,89 +85,6 @@
         return $rootScope.$broadcast('routesLoaded');
       };
       return OC.Router.registerLoadedCallback(init);
-    }
-  ]);
-
-}).call(this);
-
-
-
-/*
-# ownCloud
-#
-# @author Bernhard Posselt
-# Copyright (c) 2012 - Bernhard Posselt <nukeawhale@gmail.com>
-#
-# This file is licensed under the Affero General Public License version 3 or later.
-# See the COPYING-README file
-#
-*/
-
-
-/*
-# Used for properly distributing received model data from the server
-*/
-
-
-(function() {
-
-  angular.module('OC').factory('_Publisher', function() {
-    var Publisher;
-    Publisher = (function() {
-
-      function Publisher() {
-        this.subscriptions = {};
-      }
-
-      Publisher.prototype.subscribeModelTo = function(model, name) {
-        var _base;
-        (_base = this.subscriptions)[name] || (_base[name] = []);
-        return this.subscriptions[name].push(model);
-      };
-
-      Publisher.prototype.publishDataTo = function(data, name) {
-        var subscriber, _i, _len, _ref, _results;
-        _ref = this.subscriptions[name] || [];
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          subscriber = _ref[_i];
-          _results.push(subscriber.handle(data));
-        }
-        return _results;
-      };
-
-      return Publisher;
-
-    })();
-    return Publisher;
-  });
-
-}).call(this);
-
-
-
-/*
-# ownCloud
-#
-# @author Bernhard Posselt
-# Copyright (c) 2012 - Bernhard Posselt <nukeawhale@gmail.com>
-#
-# This file is licensed under the Affero General Public License version 3 or later.
-# See the COPYING-README file
-#
-*/
-
-
-/*
-# This file creates instances of classes
-*/
-
-
-(function() {
-
-  angular.module('OC').factory('Publisher', [
-    '_Publisher', function(_Publisher) {
-      return new _Publisher();
     }
   ]);
 
@@ -204,7 +153,7 @@
         postData = $.param(data);
         headers = {
           headers: {
-            'requesttoken': requesttoken,
+            'requesttoken': oc_requesttoken,
             'Content-Type': 'application/x-www-form-urlencoded'
           }
         };
@@ -231,6 +180,60 @@
 
     })();
     return Request;
+  });
+
+}).call(this);
+
+
+
+/*
+# ownCloud
+#
+# @author Bernhard Posselt
+# Copyright (c) 2012 - Bernhard Posselt <nukeawhale@gmail.com>
+#
+# This file is licensed under the Affero General Public License version 3 or later.
+# See the COPYING-README file
+#
+*/
+
+
+/*
+# Used for properly distributing received model data from the server
+*/
+
+
+(function() {
+
+  angular.module('OC').factory('_Publisher', function() {
+    var Publisher;
+    Publisher = (function() {
+
+      function Publisher() {
+        this.subscriptions = {};
+      }
+
+      Publisher.prototype.subscribeModelTo = function(model, name) {
+        var _base;
+        (_base = this.subscriptions)[name] || (_base[name] = []);
+        return this.subscriptions[name].push(model);
+      };
+
+      Publisher.prototype.publishDataTo = function(data, name) {
+        var subscriber, _i, _len, _ref, _results;
+        _ref = this.subscriptions[name] || [];
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          subscriber = _ref[_i];
+          _results.push(subscriber.handle(data));
+        }
+        return _results;
+      };
+
+      return Publisher;
+
+    })();
+    return Publisher;
   });
 
 }).call(this);
@@ -417,7 +420,11 @@
 
   angular.module('AppTemplateAdvanced').filter('leetIt', function() {
     return function(leetThis) {
-      return leetThis.replace('e', '3').replace('i', '1');
+      if (leetThis !== void 0) {
+        return leetThis.replace('e', '3').replace('i', '1');
+      } else {
+        return '';
+      }
     };
   });
 
@@ -491,6 +498,15 @@
             somesetting: name
           };
           return this.post(route, {}, data);
+        };
+
+        AppTemplateAdvancedRequest.prototype.getName = function(route, scope) {
+          var success;
+          success = function(data) {
+            scope.name = data.data.somesetting;
+            return console.log(data);
+          };
+          return this.post(route, {}, {}, success);
         };
 
         return AppTemplateAdvancedRequest;
@@ -569,10 +585,17 @@
         this.$scope.saveName = function(name) {
           return _this.saveName(name);
         };
+        this.$scope.$on('routesLoaded', function() {
+          return _this.getName(_this.$scope);
+        });
       }
 
       ExampleController.prototype.saveName = function(name) {
         return this.request.saveName(this.config.routes.saveNameRoute, name);
+      };
+
+      ExampleController.prototype.getName = function(scope) {
+        return this.request.getName(this.config.routes.getNameRoute, scope);
       };
 
       return ExampleController;

@@ -29,14 +29,16 @@ namespace OCA\AppFramework\Core;
  * This is used to wrap the owncloud static api calls into an object to make the
  * code better abstractable for use in the dependency injection container
  *
- * Extend this to your needs
+ * Should you find yourself in need for more methods, simply inherit from this
+ * class and add your methods
  */
 class API {
 
 	private $appName;
 
 	/**
-	 * @param string $appName: the name of your application
+	 * constructor
+	 * @param string $appName the name of your application
 	 */
 	public function __construct($appName){
 		$this->appName = $appName;
@@ -44,7 +46,8 @@ class API {
 
 
 	/**
-	 * @return the name of your application
+	 * used to return the appname of the set application
+	 * @return string the name of your application
 	 */
 	public function getAppName(){
 		return $this->appName;
@@ -52,7 +55,8 @@ class API {
 
 
 	/**
-	 * @return: the user id of the current user
+	 * Gets the userid of the current user
+	 * @return string the user id of the current user
 	 */
 	public function getUserId(){
 		return \OCP\USER::getUser();
@@ -69,8 +73,7 @@ class API {
 
 	/**
 	 * Adds a new javascript file
-	 * @param string $scriptName: the name of the javascript in js/ 
-	 *                            without the suffix
+	 * @param string $scriptName the name of the javascript in js/ without the suffix
 	 */
 	public function addScript($scriptName){
 		\OCP\Util::addScript($this->appName, $scriptName);
@@ -79,8 +82,7 @@ class API {
 
 	/**
 	 * Adds a new css file
-	 * @param string $styleName: the name of the css file in css/
-	 * without the suffix
+	 * @param string $styleName the name of the css file in css/without the suffix
 	 */
 	public function addStyle($styleName){
 		\OCP\Util::addStyle($this->appName, $styleName);
@@ -88,8 +90,8 @@ class API {
 
 
 	/**
-	 * @brief shorthand for addScript for files in the 3rdparty directory
-	 * @param string $name: the name of the file without the suffix
+	 * shorthand for addScript for files in the 3rdparty directory
+	 * @param string $name the name of the file without the suffix
 	 */
 	public function add3rdPartyScript($name){
 		\OCP\Util::addScript($this->appName . '/3rdparty', $name);
@@ -97,8 +99,8 @@ class API {
 
 
 	/**
-	 * @brief shorthand for addStyle for files in the 3rdparty directory
-	 * @param string $name: the name of the file without the suffix
+	 * shorthand for addStyle for files in the 3rdparty directory
+	 * @param string $name the name of the file without the suffix
 	 */
 	public function add3rdPartyStyle($name){
 		\OCP\Util::addStyle($this->appName . '/3rdparty', $name);
@@ -106,8 +108,8 @@ class API {
 
 	/**
 	 * Looks up a systemwide defined value
-	 * @param string $key: the key of the value, under which it was saved
-	 * @return the saved value
+	 * @param string $key the key of the value, under which it was saved
+	 * @return string the saved value
 	 */
 	public function getSystemValue($key){
 		return \OCP\Config::getSystemValue($key, '');
@@ -116,8 +118,8 @@ class API {
 
 	/**
 	 * Sets a new systemwide value
-	 * @param string $key: the key of the value, under which will be saved
-	 * @param $value: the value that should be stored
+	 * @param string $key the key of the value, under which will be saved
+	 * @param string $value the value that should be stored
 	 */
 	public function setSystemValue($key, $value){
 		return \OCP\Config::setSystemValue($key, $value);
@@ -126,32 +128,34 @@ class API {
 
 	/**
 	 * Shortcut for setting a user defined value
-	 * @param $key the key under which the value is being stored
-	 * @param $value the value that you want to store
+	 * @param string $key the key under which the value is being stored
+	 * @param string $value the value that you want to store
+	 * @param string $userId the userId of the user that we want to store the value under, defaults to the current one
 	 */
-	public function setUserValue($key, $value, $user=null){
-		if($user === null){
-			$user = $this->getUserId();
+	public function setUserValue($key, $value, $userId=null){
+		if($userId === null){
+			$userId = $this->getUserId();
 		}
-		\OCP\Config::setUserValue($user, $this->appName, $key, $value);
+		\OCP\Config::setUserValue($userId, $this->appName, $key, $value);
 	}
 
 
 	/**
 	 * Shortcut for getting a user defined value
-	 * @param $key the key under which the value is being stored
+	 * @param string $key the key under which the value is being stored
+	 * @param string $userId the userId of the user that we want to store the value under, defaults to the current one
 	 */
-	public function getUserValue($key, $user=null){
-		if($user === null){
-			$user = $this->getUserId();
+	public function getUserValue($key, $userId=null){
+		if($userId === null){
+			$userId = $this->getUserId();
 		}
-		return \OCP\Config::getUserValue($user, $this->appName, $key);
+		return \OCP\Config::getUserValue($userId, $this->appName, $key);
 	}
 
 
 	/**
 	 * Returns the translation object
-	 * @return the translation object
+	 * @return \OC_L10N the translation object
 	 */
 	public function getTrans(){
 		return \OC_L10N::get($this->appName);
@@ -160,10 +164,10 @@ class API {
 
 	/**
 	 * Used to abstract the owncloud database access away
-	 * @param string $sql: the sql query with ? placeholder for params
-	 * @param int $limit: the maximum number of rows
-	 * @param int $offset: from which row we want to start
-	 * @return a query object
+	 * @param string $sql the sql query with ? placeholder for params
+	 * @param int $limit the maximum number of rows
+	 * @param int $offset from which row we want to start
+	 * @return \OCP\DB a query object
 	 */
 	public function prepareQuery($sql, $limit=null, $offset=null){
 		return \OCP\DB::prepare($sql, $limit, $offset);
@@ -172,8 +176,8 @@ class API {
 
 	/**
 	 * Used to get the id of the just inserted element
-	 * @param string $tableName: the name of the table where we inserted the item
-	 * @return the id of the inserted element
+	 * @param string $tableName the name of the table where we inserted the item
+	 * @return int the id of the inserted element
 	 */
 	public function getInsertId($tableName=null){
 		return \OCP\DB::insertid($tableName);
@@ -182,10 +186,12 @@ class API {
 
 	/**
 	 * Returns the URL for a route
-	 * @return the url
+	 * @param string $routeName the name of the route
+	 * @param array $arguments an array with arguments which will be filled into the url
+	 * @return string the url
 	 */
-	public function linkToRoute($routeName, $params = array()){
-		return \OC_Helper::linkToRoute($routeName, $params);
+	public function linkToRoute($routeName, $arguments=array()){
+		return \OC_Helper::linkToRoute($routeName, $arguments);
 	}
 
 	/**
@@ -208,8 +214,11 @@ class API {
 	}
 	
 	/**
-	 * @brief links to a file
-	 * @deprecated
+	 * links to a file
+	 * @param string $file the name of the file
+	 * @param string $appName the name of the app, defaults to the current one
+	 * @deprecated replaced with linkToRoute()
+	 * @return string the url
 	 */
 	public function linkToAbsolute($file, $appName=null, $params = array()){
 		if($appName === null){
@@ -221,7 +230,7 @@ class API {
 
 	/**
 	 * Checks if the current user is logged in
-	 * @return bool
+	 * @return bool true if logged in
 	 */
 	public function isLoggedIn(){
 		return \OC_User::isLoggedIn();
@@ -230,8 +239,8 @@ class API {
 
 	/**
 	 * Checks if a user is an admin
-	 * @param string $userId: the id of the user
-	 * @return bool
+	 * @param string $userId the id of the user
+	 * @return bool true if admin
 	 */
 	public function isAdminUser($userId){
 		return \OC_User::isAdminUser($userId);
@@ -240,8 +249,8 @@ class API {
 
 	/**
 	 * Checks if a user is an subadmin
-	 * @param string $userId: the id of the user
-	 * @return bool
+	 * @param string $userId the id of the user
+	 * @return bool true if subadmin
 	 */
 	public function isSubAdminUser($userId){
 		return \OC_SubAdmin::isSubAdmin($userId);
@@ -250,7 +259,7 @@ class API {
 
 	/**
 	 * Checks if the CSRF check was correct
-	 * @return bool
+	 * @return bool true if CSRF check passed
 	 */
 	public function passesCSRFCheck(){
 		return \OC_Util::isCallRegistered();
@@ -259,8 +268,8 @@ class API {
 
 	/**
 	 * Checks if an app is enabled
-	 * @param string $appName: the name of an app
-	 * @return bool
+	 * @param string $appName the name of an app
+	 * @return bool true if app is enabled
 	 */
 	public function isAppEnabled($appName){
 		\OC_App::isEnabled($appName);
@@ -311,8 +320,8 @@ class API {
 
 	/**
 	 * Writes a function into the error log
-	 * @param string $msg: the error message to be logged
-	 * @param int $level: the error level
+	 * @param string $msg the error message to be logged
+	 * @param int $level the error level
 	 */
 	public function log($msg, $level=null){
 		if($level === null){
@@ -324,9 +333,10 @@ class API {
 
 	/**
 	 * Returns a template
-	 * @param string $templateName: the name of the template
-	 * @param string $renderAs: how it should be rendered
-	 * @param string $appName: the name of the app
+	 * @param string $templateName the name of the template
+	 * @param string $renderAs how it should be rendered
+	 * @param string $appName the name of the app
+	 * @return \OCP\Template a new template
 	 */
 	public function getTemplate($templateName, $renderAs='user', $appName=null){
 		if($appName === null){
@@ -342,8 +352,9 @@ class API {
 
 
 	/**
-	 * @param string path: the path to the file on the oc filesystem
-	 * @return the filepath in the filesystem
+	 * turns an owncloud path into a path on the filesystem
+	 * @param string path the path to the file on the oc filesystem
+	 * @return string the filepath in the filesystem
 	 */
 	public function getLocalFilePath($path){
 		return \OC_Filesystem::getLocalFile($path);
@@ -351,7 +362,8 @@ class API {
 
 
 	/**
-	 * @return returns a new open EventSource class
+	 * used to return and open a new eventsource
+	 * @return \OC_EventSource a new open EventSource class
 	 */
 	public function openEventSource(){
 		return new \OC_EventSource();
