@@ -54,6 +54,11 @@ class DIContainer extends BaseContainer {
 
 
 		/**
+		* TWIG ?
+		 */
+			$this['TwigTemplateDirectory'] = __DIR__ . '/../templates';
+		
+		/**
 		 * MAPPERS
 		 */
 		$this['EBookMapper'] = $this->share(function($c){

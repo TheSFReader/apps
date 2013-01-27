@@ -1,32 +1,21 @@
 <div id="app">
-<?php $libraryName =$_['libraryName']; 
-	$opdsLink = $_['opdsLink'];
-	
-	print_unescaped("  <h1 class=\"heading\">$libraryName</h1>\n");
-	print_unescaped("  <a href=\"$opdsLink\">OPDS\n</a><BR/>\n"); ?>
-	Sort by : <?php 
-	$thisLink = $_['thisLink'];
-	$newestLink = $_['newestLink'];
-	$authorsLink = $_['authorsLink'];
-	$titleLink = $_['titleLink'];
-	$publisherLink = $_['publisherLink'];
-	print_unescaped("<a href=\"$newestLink\">Newest</a>, ");
-	print_unescaped("<a href=\"$titleLink\">Title</a>, ");
-	print_unescaped("<a href=\"$publisherLink\">Publisher</a>, ");
-	print_unescaped("<a href=\"$authorsLink\">Author Name</a> <BR/>");
-
-	foreach ($_['ebooks'] as $ebook) {
-		$link = $ebook->DetailsLink();
-		print_unescaped("<a href=\"$link\">");  p ($ebook->Title()); print_unescaped( "</a>"); 
-		$authors = $ebook->Authors();
-		if(! empty( $authors)) {
-			p(" by " . reset($authors));
-		}
-		print_unescaped("<BR/>");
-	}
-	
-	print_unescaped("<a href=\"$thisLink\">this</a> ");
-?>
+  <h1 class="heading">{{ libraryName}}</h1>
+  <a href="{{ opdsLink }}">OPDS</a><BR/>
+  Sort by : <a href="{{ newestLink}} ">Newest</a>, 
+	<a href="{{ titleLink}} ">Title</a>, 
+	<a href="{{ publisherLink}} ">Publisher</a>,
+	<a href="{{ authorsLink}} ">Author Name</a> 
+	<BR/>
+	{% if ebooks |length > 0 %}
+    <ul>
+        {% for ebook in ebooks %}
+            <li><a href="{{ ebook.DetailsLink}}">{{ ebook.Title|e }}</a>
+            {% if ebook.Authors|length > 0 %} by: {{ ebook.Authors|join(', ') }}<BR/>{% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+	{% endif %}
+	<a href="{{ thisLink }}">This</a><BR/>
 </div>
 
 
