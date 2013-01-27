@@ -77,15 +77,15 @@ class EBookMapper extends Mapper {
 	 * @throws DoesNotExistException: if the item does not exist
 	 * @return the item
 	 */
-	public function findByPath($path){
-		$sql = 'SELECT * FROM ' . $this->tableName . ' WHERE filepath = ?';
-		$params = array($path);
+	public function findByPathAndUserId($path,$user){
+		$sql = 'SELECT * FROM ' . $this->tableName . ' WHERE filepath = ? and user = ?';
+		$params = array($path, $user);
 	
 		$result = $this->execute($sql, $params)->fetchRow();
 		if($result){
 			return new EBook($api, $result);
 		} else {
-			throw new DoesNotExistException('EBook with path ' . $path . ' does not exist!');
+			throw new DoesNotExistException('EBook with path ' . $path . ' does not exist for user $user!');
 		}
 	}
 
@@ -104,6 +104,23 @@ class EBookMapper extends Mapper {
 
 		return $entityList;
 	}
+	
+	/**
+	 * Finds all Items for a given user
+	 * @return array containing all items
+	 */
+	public function findAllForUser($user){
+		$sql = 'SELECT * FROM ' . $this->tableName . ' WHERE user = ?' ;
+		$params = array($user);
+		$result= $this->execute($sql,$params);
+	
+		$entityList = array();
+		while($row = $result->fetchRow()){
+			$entity = new EBook($this->api,$row);
+			array_push($entityList, $entity);
+		}
+		return $entityList;
+	}
 
 
 	/**
@@ -111,12 +128,13 @@ class EBookMapper extends Mapper {
 	 * @param Item $item: the item to be saved
 	 * @return the item with the filled in id
 	 */
-	public function save($ebook){
-		$sql = 'INSERT INTO '. $this->tableName . '(fileid, filepath, authors, title, subjects, mtime, '.
+	public function save($ebook, $user){
+		$sql = 'INSERT INTO '. $this->tableName . '(user, fileid, filepath, authors, title, subjects, mtime, '.
 				'updated, description, isbn, language, publisher, detailslink, coverlink, thumbnaillink)'.
-				' VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+				' VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
 		$params = array(
+			$user,
 			$ebook->FileId(),
 			$ebook->Path(),
 			json_encode($ebook->Authors()),
@@ -197,9 +215,9 @@ class EBookMapper extends Mapper {
 	 * delete an ebook, as specified by its local path
 	 * @param string $path the path of the ebook he user whshes to remove
 	 */
-	public function deleteByPath($path){
-		$sql = 'DELETE FROM `' . $this->tableName . '` WHERE `filepath` = ?';
-		$params = array($path);
+	public function deleteByPath($path, $user){
+		$sql = 'DELETE FROM `' . $this->tableName . '` WHERE `filepath` = ? and user = ?';
+		$params = array($path, $user);
 		$this->execute($sql, $params);
 	}
 	
@@ -209,8 +227,8 @@ class EBookMapper extends Mapper {
 	 * @throws DoesNotExistException: if the item does not exist
 	 * @return the item
 	 */
-	public function updateEbookPath($oldpath,$newpath){
-		$sql = 'UPDATE '. $this->tableName . ' SET filepath = ? WHERE filepath = ?';
+	public function updateEbookPath($oldpath,$newpath, $user){
+		$sql = 'UPDATE '. $this->tableName . ' SET filepath = ? WHERE filepath = ? and user = ?';
 		$params = array($newpath, $oldpath);
 		$this->execute($sql, $params);
 	}

@@ -13,9 +13,9 @@ class HookHandler {
 			$diContainer = new DIContainer();
 			$api = $diContainer['API'];
 			$ebook = new EBook($api,  $path);
-			
+			$userId = $api->getUserId();
 			$ebookMapper = $diContainer['EBookMapper'];
-			$ebookMapper->save($ebook);
+			$ebookMapper->save($ebook,$userId);
 		}
 	}
 	
@@ -25,9 +25,10 @@ class HookHandler {
 		try { 
 			$diContainer = new DIContainer();
 			$api = $diContainer['API'];
-				
+
+			$userId = $api->getUserId();
 			$ebookMapper = $diContainer['EBookMapper'];
-			$ebookMapper->deleteByPath($path);
+			$ebookMapper->deleteByPath($path,$userId);
 		} catch(DoesNotExistException $ex) {
 			\OC_Log::write("HookHandler", "Caught! " . var_export($params, true),4);
 		}
@@ -39,8 +40,8 @@ class HookHandler {
 		
 		$diContainer = new DIContainer();
 		$api = $diContainer['API'];
-		
+		$userId = $api->getUserId();
 		$ebookMapper = $diContainer['EBookMapper'];
-		$ebookMapper->updateEbookPath($oldpath, $newpath);
+		$ebookMapper->updateEbookPath($oldpath, $newpath, $userId);
 	}
 }

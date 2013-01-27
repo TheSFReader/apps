@@ -132,7 +132,7 @@ class ItemController extends Controller {
 		$this->api->addStyle('style');
 
 		$ebookMapper = new EBookMapper($this->api);
-		$ebooks = $ebookMapper->findAll();
+		$ebooks = $ebookMapper->findAllForUser($this->api->getUserId());
 		
 		$sortby = $this->params('sortby');
 		if($sortby !== null) {
@@ -213,7 +213,7 @@ class ItemController extends Controller {
 		$templateName = 'opds_acquisition';
 		
 		$ebookMapper = new EBookMapper($this->api);
-		$ebooks = $ebookMapper->findAll();
+		$ebooks = $ebookMapper->findAllForUser($this->api->getUserId());
 		
 		$currentTime = new \DateTime();
 		$lastMTime = null;
