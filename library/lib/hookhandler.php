@@ -44,4 +44,17 @@ class HookHandler {
 		$ebookMapper = $diContainer['EBookMapper'];
 		$ebookMapper->updateEbookPath($oldpath, $newpath, $userId);
 	}
+	
+	public static function removeUser($params) {
+		$uid = $params['uid'];
+		$diContainer = new DIContainer();
+		$api = $diContainer['API'];
+		$userId = $api->getUserId();
+		$ebookMapper = $diContainer['EBookMapper'];
+		$results = $ebookMapper->findAllForUser($uid);
+		
+		foreach($results as $ebook) {
+			$ebookMapper->delete($ebook->getId());
+		}
+	}
 }

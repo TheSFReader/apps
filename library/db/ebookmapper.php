@@ -121,6 +121,8 @@ class EBookMapper extends Mapper {
 		}
 		return $entityList;
 	}
+	
+	
 
 
 	/**
@@ -220,6 +222,8 @@ class EBookMapper extends Mapper {
 		$params = array($path, $user);
 		$this->execute($sql, $params);
 	}
+	
+	
 	
 	/**
 	 * change an ebook's path

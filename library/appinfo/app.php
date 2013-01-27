@@ -51,3 +51,5 @@ namespace OCA\Library;
 \OCP\Util::connectHook(\OC_Filesystem::CLASSNAME, \OC_Filesystem::signal_post_write, 'OCA\Library\Lib\HookHandler', 'writeFile');
 \OCP\Util::connectHook(\OC_Filesystem::CLASSNAME, \OC_Filesystem::signal_delete, 'OCA\Library\Lib\HookHandler', 'removeFile');
 \OCP\Util::connectHook(\OC_Filesystem::CLASSNAME, \OC_Filesystem::signal_post_rename, "OCA\Library\Lib\HookHandler", "renameFile");
+\OCP\Util::connectHook('OC_User', 'post_deleteUser', "OCA\Library\Lib\HookHandler", "removeUser");
+
