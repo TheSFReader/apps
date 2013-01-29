@@ -151,14 +151,8 @@ class ItemController extends Controller {
 		
 		$params = array(
 			'thisLink' => $this->api->linkToRoute($routeName, $paramsIn),
-			'indexLink' => $this->api->linkToRoute('library_index'),
-			'newestLink' => $this->api->linkToRoute('library_index_sort', array('sortby' => 'newest')),
-			'authorsLink' => $this->api->linkToRoute('library_index_sort', array('sortby' => 'author')),
-			'titleLink' => $this->api->linkToRoute('library_index_sort', array('sortby' => 'title')),
-			'publisherLink' => $this->api->linkToRoute('library_index_sort', array('sortby' => 'publisher')),
 			'ebooks' => $ebooks,
-			'libraryName' => $this->api->getUserId() .'\'s Library',
-			'opdsLink' => $this->api->linkToRoute('library_opds'),
+			'userName' => $this->api->getUserId(),
 		);
 		return $this->render($templateName, $params);
 	}

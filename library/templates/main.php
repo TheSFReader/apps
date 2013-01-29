@@ -1,10 +1,10 @@
 <div id="app">
-  <h1 class="heading">{{ libraryName}}</h1>
-  <a href="{{ opdsLink }}">OPDS</a><BR/>
-  Sort by : <a href="{{ newestLink}} ">Newest</a>, 
-	<a href="{{ titleLink}} ">Title</a>, 
-	<a href="{{ publisherLink}} ">Publisher</a>,
-	<a href="{{ authorsLink}} ">Author Name</a> 
+  <h1 class="heading">{{ t("%s's Library",userName) }}</h1>
+  <a href="{{ api.linkToRoute('library_opds') }}">OPDS</a><BR/>
+  Sort by : <a href="{{ api.linkToRoute('library_index_sort', {'sortby': 'newest'}) }}">Newest</a>,
+	<a href="{{ api.linkToRoute('library_index_sort', {'sortby': 'title'}) }}">Title</a>, 
+	<a href="{{ api.linkToRoute('library_index_sort', {'sortby': 'publisher'}) }}">Publisher</a>,
+	<a href="{{ api.linkToRoute('library_index_sort', {'sortby': 'author'}) }}">Author Name</a> 
 	<BR/>
 	{% if ebooks |length > 0 %}
     <ul>
