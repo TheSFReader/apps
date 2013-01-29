@@ -79,6 +79,20 @@ class DIContainer extends \Pimple {
 				return call_user_func_array(array($trans, 't'), func_get_args());
 			});
 		});
+		$this['TwigLinkToRoute'] = $this->share(function($c){
+			$api = $c['API'];
+			return new \Twig_SimpleFunction('linkToRoute', function () use ($api) {
+				$trans = $api->getTrans();
+				return call_user_func_array(array($api, 'linkToRoute'), func_get_args());
+			});
+		});
+		$this['TwigLinkToRouteAbsolute'] = $this->share(function($c){
+			$api = $c['API'];
+			return new \Twig_SimpleFunction('linkToRouteAbsolute', function () use ($api) {
+				$trans = $api->getTrans();
+				return call_user_func_array(array($api, 'linkToRouteAbsolute'), func_get_args());
+			});
+		});
 
 		$this['TwigLoader'] = $this->share(function($c){
 			return new \Twig_Loader_Filesystem($c['TwigTemplateDirectory']);
@@ -96,7 +110,11 @@ class DIContainer extends \Pimple {
 					'autoescape' => true
 				));
 			}
+			$api = $c['API'];
+			$twig->addGlobal('api',$api);
 			$twig->addFunction($c['TwigL10N']);
+			//$twig->addFunction($c['TwigLinkToRoute']);
+			//$twig->addFunction($c['TwigLinkToRouteAbsolute']);
 			return $twig;
 		});
 
