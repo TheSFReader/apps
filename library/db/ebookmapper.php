@@ -123,6 +123,18 @@ class EBookMapper extends Mapper {
 	}
 	
 	
+	/**
+	 * Findsthe latest
+	 * @return array containing all items
+	 */
+	public function latestMTime($user) {
+		$sql = 'SELECT MAX(mtime) as maxMTime FROM ' . $this->tableName . ' WHERE user = ?' ;
+		$params = array($user);
+		$result= $this->execute($sql,$params)->fetchrow();
+		
+		$this->api->log($sql . ' -->' . print_r($result,true));
+		return $result['maxMTime'];
+	}
 
 
 	/**

@@ -174,13 +174,20 @@ class ItemController extends Controller {
 		
 		$templateName = 'opds_index';
 		
+		$ebookMapper = new EBookMapper($this->api);
+		$mtime = $ebookMapper->latestMTime($this->api->getUserId());
+		$currentTime = new \DateTime();
+		if($mtime!== null) {
+			$currentTime->setTimestamp($mtime);
+		}
+		
 		$params = array(
 			'thisLink' => $this->api->linkToRouteAbsolute($routeName, $paramsIn),
 			'opdsLink' => $this->api->linkToRouteAbsolute('library_opds'),
 			'indexLink' => $this->api->linkToRouteAbsolute('library_index'),
 			'newestLink' => $this->api->linkToRouteAbsolute('library_opds_new'),
 				//FIXME
-			'updateDate' => '2013-01-19T20:56:07Z',		
+			'updateDate' => $currentTime->format(\DateTime::ATOM),		
 			'userName' => $this->api->getUserId(),
 			'userMail' => 'TheSFReader@gmail.com',
 			'libraryName' => $this->api->getUserId() .'\'s Library',

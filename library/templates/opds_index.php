@@ -9,8 +9,8 @@
 	</author>
 	{% endif %}
   <link type="application/atom+xml; profile=opds-catalog; kind=navigation" rel="self" href="{{ thisLink }}"/>
-  <link type="application/atom+xml; profile=opds-catalog; kind=navigation" title="Home" rel="start" href="{{ opdsLink }}"/>
-  <link type="application/atom+xml; profile=opds-catalog; kind=acquisition" title="Newest" rel="http://opds-spec.org/sort/new" href="{{ newestLink }}"/>
+  <link type="application/atom+xml; profile=opds-catalog; kind=navigation" title="Home" rel="start" href="{{ absoluteUrl('library_index') }}"/>
+  <link type="application/atom+xml; profile=opds-catalog; kind=acquisition" title="Newest" rel="http://opds-spec.org/sort/new" href="{{ absoluteUrl('library_opds_new') }}"/>
 </feed>
 
 

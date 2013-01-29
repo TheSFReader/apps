@@ -1,6 +1,6 @@
 <div id="app">
 	<h1 class="heading">Details</h1>
-	<a href="{{ indexLink }}">Library</a><BR/>
+	<a href="{{ url('library_index') }}">Library</a><BR/>
 	<a href="{{ ebook.DetailsLink }}">{{ ebook.Title }}</a><BR/>
 	<a href="{{ ebook.formats.epub }}">Download</a><BR/>
 	<a href="{{ ebook.CoverLink }}"><img src="{{ ebook.ThumbnailLink }}"/></a><BR/>
