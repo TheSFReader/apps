@@ -20,16 +20,29 @@ class Cover extends Response {
 		if($this->image !== null)
 			$this->image->show();
 	}
-	
-	public static function getThumbnail($api, $image_path) {
+
+	public static function clear($api, $ebook_path) {
+		$localFile = $api->getLocalFile($ebook_path);
+		$view = \OCP\Files::getStorage('library');
+		$thumnail_file = basename($ebook_path).".thmb";
+		if ($view->file_exists($thumnail_file)) {
+			$view->unlink($thumnail_file);
+		}
+		$cover_file = basename($ebook_path).".cvr";
+		if ($view->file_exists($cover_file)) {
+			$view->unlink($cover_file);
+		}
 		
-		$localFile = \OC_Filesystem::getLocalFile($image_path);
+	}
+	public static function getThumbnail($api, $ebook_path) {
+		
 		$view = \OCP\Files::getStorage('library');
 
-		$cover_file = basename($image_path).".thmb";
+		$cover_file = basename($ebook_path).".thmb";
 		if ($view->file_exists($cover_file)) {
 			$image = new \OC_Image($view->fopen($cover_file, 'r'));
 		}else {
+			$localFile = $api->getLocalFile($ebook_path);
 			$epub = @new \EPub($localFile);
 			$cover = $epub->Cover();
 			$image=new \OC_Image($cover['data']);
@@ -47,15 +60,15 @@ class Cover extends Response {
 		return null;
 	}
 
-	public static function getCover($api, $image_path) {
+	public static function getCover($api, $ebook_path) {
 
-		$localFile = \OC_Filesystem::getLocalFile($image_path);
 		$view = \OCP\Files::getStorage('library');
 
-		$cover_file = basename($image_path).".cvr";
+		$cover_file = basename($ebook_path).".cvr";
 		if ($view->file_exists($cover_file)) {
 			$image = new \OC_Image($view->fopen($cover_file, 'r'));
 		}else {
+			$localFile = $api->getLocalFile($ebook_path);
 			$epub = @new \EPub($localFile);
 			$cover = $epub->Cover();
 			$image=new \OC_Image($cover['data']);

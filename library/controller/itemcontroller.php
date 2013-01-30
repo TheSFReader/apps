@@ -28,11 +28,11 @@ use OCA\AppFramework\Db\DoesNotExistException as DoesNotExistException;
 use OCA\AppFramework\Http\RedirectResponse as RedirectResponse;
 
 
-use OCA\Library\Db\EBookMapper as EBookMapper;
-use OCA\Library\Db\EBook as EBook;
+use OCA\Library\Db\EBookMapper;
+use OCA\Library\Db\EBook;
 
-use OCA\Library\Db\Item as Item;
-use OCA\Library\Lib\Cover as Cover;
+use OCA\Library\Db\Item;
+use OCA\Library\Lib\Cover;
 
 # ATOM catalog
 const ATOM_CATALOG = 'application/atom+xml';

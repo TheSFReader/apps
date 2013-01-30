@@ -2,9 +2,10 @@
 
 namespace OCA\Library\Lib;
 
-use OCA\Library\Db\EBook as EBook;
-use OCA\Library\Db\EBookMapper as EBookMapper;
-use OCA\Library\DependencyInjection\DIContainer as DIContainer;
+use OCA\Library\Db\EBook;
+use OCA\Library\Db\EBookMapper;
+use OCA\Library\DependencyInjection\DIContainer;
+use OCA\Library\Lib\Cover;
 
 class HookHandler {
 	public static function writeFile($params) {
@@ -26,12 +27,16 @@ class HookHandler {
 			$diContainer = new DIContainer();
 			$api = $diContainer['API'];
 
+			Cover::clear($api,$path);
+			
 			$userId = $api->getUserId();
 			$ebookMapper = $diContainer['EBookMapper'];
 			$ebookMapper->deleteByPath($path,$userId);
 		} catch(DoesNotExistException $ex) {
 			\OC_Log::write("HookHandler", "Caught! " . var_export($params, true),4);
 		}
+		
+		
 	}
 	
 	public static function renameFile($params) {
@@ -40,6 +45,7 @@ class HookHandler {
 		
 		$diContainer = new DIContainer();
 		$api = $diContainer['API'];
+		Cover::clear($api,$oldpath);
 		$userId = $api->getUserId();
 		$ebookMapper = $diContainer['EBookMapper'];
 		$ebookMapper->updateEbookPath($oldpath, $newpath, $userId);
@@ -54,6 +60,8 @@ class HookHandler {
 		$results = $ebookMapper->findAllForUser($uid);
 		
 		foreach($results as $ebook) {
+			Cover::clear($api,$ebook->getPath());
+			
 			$ebookMapper->delete($ebook->getId());
 		}
 	}
