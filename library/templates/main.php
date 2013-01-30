@@ -1,5 +1,5 @@
 <div id="app">
-  <h1 class="heading">{{ t("%s's Library",userName) }}</h1>
+  <h1 class="heading">{{ trans("%s's Library",userName) }}</h1>
   <a href="{{ url('library_opds') }}">OPDS</a><BR/>
   Sort by : <a href="{{ url('library_index_sort', {'sortby': 'newest'}) }}">Newest</a>,
 	<a href="{{ url('library_index_sort', {'sortby': 'title'}) }}">Title</a>, 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns:dcterms="http://purl.org/dc/terms/" xmlns:thr="http://purl.org/syndication/thread/1.0" xmlns:opds="http://opds-spec.org/2010/catalog" xml:lang="fr" xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:app="http://www.w3.org/2007/app" xmlns="http://www.w3.org/2005/Atom">
 	<id>{{ userName }}:{{ thisLink }}</id>
-	<title>{{ t("%s's Library", userName) }}</title>
+	<title>{{ trans("%s's Library", userName) }}</title>
 	<updated>{{ updateDate }}</updated>
 	{% if userName %}<author>
 		<name>{{userName}}</name>

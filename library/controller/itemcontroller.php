@@ -144,7 +144,7 @@ class ItemController extends Controller {
 		
 
 		$templateName = 'main';
-		$paramsIn =  $this->getAllParams();
+		$paramsIn =  $this->getParams();
 		$routeName = $paramsIn['_route'];
 		// unset the _route param so that it is not re-sent
 		unset($paramsIn['_route']);
@@ -166,7 +166,7 @@ class ItemController extends Controller {
 	 * @return an instance of a Response implementation
 	 */
 	public function opds(){
-		$paramsIn =  $this->getAllParams();
+		$paramsIn =  $this->getParams();
 		$routeName = $paramsIn['_route'];
 		// unset the _route param so that it is not re-sent
 		unset($paramsIn['_route']);
@@ -201,7 +201,7 @@ class ItemController extends Controller {
 	 * @return an instance of a Response implementation
 	 */
 	public function opds_new(){
-		$paramsIn =  $this->getAllParams();
+		$paramsIn =  $this->getParams();
 		$routeName = $paramsIn['_route'];
 		// unset the _route param so that it is not re-sent
 		unset($paramsIn['_route']);
