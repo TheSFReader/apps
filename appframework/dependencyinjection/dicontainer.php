@@ -78,20 +78,7 @@ class DIContainer extends \Pimple {
 				return call_user_func_array(array($trans, 't'), func_get_args());
 			});
 		});
-		$this['TwigLinkToRoute'] = $this->share(function($c){
-			$api = $c['API'];
-			return new \Twig_SimpleFunction('url', function () use ($api) {
-				return call_user_func_array(array($api, 'linkToRoute'), func_get_args());
-			});
-		});
-		// enables the linkToRoute function as url() function in twig
-		$this['TwigLinkToAbsoluteRoute'] = $this->share(function($c){
-			$api = $c['API'];
-			return new \Twig_SimpleFunction('abs_url', function () use ($api) {
-				$url = call_user_func_array(array($api, 'linkToRoute'), func_get_args());
-				return $api->getAbsoluteURL($url);
-			});
-		});
+
 
 		// enables the linkToRoute function as url() function in twig
 		$this['TwigLinkToRoute'] = $this->share(function($c){

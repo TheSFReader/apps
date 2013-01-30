@@ -97,15 +97,5 @@ class Request {
 			return null;
 		}
 	}
-	
-	/**
-	 * Returns all get/post parameters
-	 * 
-	 * If some are duplicated, post have the priority
-	 * @return all get/post parameters
-	 */
-	public function getParams() {
-		return array_merge($this->get, $this->post);
-	}
 
 }
