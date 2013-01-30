@@ -183,14 +183,9 @@ class ItemController extends Controller {
 		
 		$params = array(
 			'thisLink' => $this->api->linkToRouteAbsolute($routeName, $paramsIn),
-			'opdsLink' => $this->api->linkToRouteAbsolute('library_opds'),
-			'indexLink' => $this->api->linkToRouteAbsolute('library_index'),
-			'newestLink' => $this->api->linkToRouteAbsolute('library_opds_new'),
-				//FIXME
 			'updateDate' => $currentTime->format(\DateTime::ATOM),		
 			'userName' => $this->api->getUserId(),
 			'userMail' => 'TheSFReader@gmail.com',
-			'libraryName' => $this->api->getUserId() .'\'s Library',
 		);
 		$headers = array();
 		$headers[]= 'Content-Type: '. OPDS_MIME_CATALOG;
@@ -217,29 +212,19 @@ class ItemController extends Controller {
 		$ebooks = $ebookMapper->findAllForUser($this->api->getUserId());
 		
 		$currentTime = new \DateTime();
-		$lastMTime = null;
-		foreach($ebooks as $ebook) {
-			// Extract the time (for now)
-			$thismtime = $ebook->MTime(); 
-			if($lastMTime == null || $thismtime > $lastMTime)
-				$lastMTime = $thismtime;
+		$mtime = $ebookMapper->latestMTime($this->api->getUserId());
+		if($mtime!== null) {
+			$currentTime->setTimestamp($mtime);
 		}
-		if($lastMTime!== null) {
-			$currentTime->setTimestamp($lastMTime);
-		}
-			
+					
 		usort($ebooks,'OCA\Library\Controller\cmpNewest');
 	
 		$params = array(
 				'thisLink' => $this->api->linkToRouteAbsolute($routeName, $paramsIn),
-				'opdsLink' => $this->api->linkToRouteAbsolute('library_opds'),
-				'indexLink' => $this->api->linkToRouteAbsolute('library_index'),
-				'newestLink' => $this->api->linkToRouteAbsolute('library_opds_new'),
 				'ebooks' => $ebooks,
 				'updateDate' => $currentTime->format(\DateTime::ATOM),
 				'userName' => $this->api->getUserId(),
 				'userMail' => 'TheSFReader@gmail.com',
-				'libraryName' => $this->api->getUserId() .'\'s Library',
 		);
 		$headers = array();
 		$headers[]= 'Content-Type: '. OPDS_MIME_CATALOG;

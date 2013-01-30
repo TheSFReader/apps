@@ -109,7 +109,7 @@ class EBookMapper extends Mapper {
 	 * Finds all Items for a given user
 	 * @return array containing all items
 	 */
-	public function findAllForUser($user){
+	public function findAllForUser($user, $ordering = null, $orderingDesc = false){
 		$sql = 'SELECT * FROM ' . $this->tableName . ' WHERE user = ?' ;
 		$params = array($user);
 		$result= $this->execute($sql,$params);
