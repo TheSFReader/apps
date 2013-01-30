@@ -132,17 +132,10 @@ class ItemController extends Controller {
 		$this->api->addStyle('style');
 
 		$ebookMapper = new EBookMapper($this->api);
-		$ebooks = $ebookMapper->findAllForUser($this->api->getUserId());
 		
 		$sortby = $this->params('sortby');
-		if($sortby !== null) {
-			$functionName = 'OCA\\Library\\Controller\cmp' . ucfirst($sortby);
-				
-			if(function_exists($functionName))
-				usort($ebooks,$functionName);
-		}
+		$ebooks = $ebookMapper->findAllForUser($this->api->getUserId(),$sortby);
 		
-
 		$templateName = 'main';
 		$paramsIn =  $this->getParams();
 		$routeName = $paramsIn['_route'];
@@ -209,7 +202,7 @@ class ItemController extends Controller {
 		$templateName = 'opds_acquisition';
 		
 		$ebookMapper = new EBookMapper($this->api);
-		$ebooks = $ebookMapper->findAllForUser($this->api->getUserId());
+		$ebooks = $ebookMapper->findAllForUser($this->api->getUserId(),'newest');
 		
 		$currentTime = new \DateTime();
 		$mtime = $ebookMapper->latestMTime($this->api->getUserId());
@@ -217,7 +210,7 @@ class ItemController extends Controller {
 			$currentTime->setTimestamp($mtime);
 		}
 					
-		usort($ebooks,'OCA\Library\Controller\cmpNewest');
+		//usort($ebooks,'OCA\Library\Controller\cmpNewest');
 	
 		$params = array(
 				'thisLink' => $this->api->linkToRouteAbsolute($routeName, $paramsIn),

@@ -87,7 +87,6 @@ Class EBook {
 		
 
 		$localFile = $this->api->getLocalFile($this->path);
-		\OC_Log::write("EBook",$this->path . '/' . $localFile,4 );
 		$this->epub = new \EPub($localFile);
 		
 

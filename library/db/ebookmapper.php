@@ -22,9 +22,9 @@
 
 namespace OCA\Library\Db;
 
-use \OCA\AppFramework\Core\API as API;
-use \OCA\AppFramework\Db\Mapper as Mapper;
-use \OCA\AppFramework\Db\DoesNotExistException as DoesNotExistException;
+use \OCA\AppFramework\Core\API;
+use \OCA\AppFramework\Db\Mapper;
+use \OCA\AppFramework\Db\DoesNotExistException;
 
 
 class EBookMapper extends Mapper {
@@ -107,13 +107,34 @@ class EBookMapper extends Mapper {
 	
 	/**
 	 * Finds all Items for a given user
+	 * @param $user the userId
+	 * @param $sortby (or null) the sorting criteria to be used ammongst:
+	 * title, newest, authors,publlisher
 	 * @return array containing all items
 	 */
-	public function findAllForUser($user, $ordering = null, $orderingDesc = false){
-		$sql = 'SELECT * FROM ' . $this->tableName . ' WHERE user = ?' ;
+	public function findAllForUser($user, $sortby = null){
+		$descending = false;
+		$paramName = 'title';
+			
+		if(isset($sortby)) {
+			if($sortby =='newest') {
+				$paramName = 'mtime';
+				$descending = true;
+			} elseif ($sortby =='authors') {
+				$paramName = 'authors';
+			} elseif ($sortby =='publisher') {
+				$paramName = 'publisher';
+			} elseif ($sortby =='title') {
+				$paramName = 'title';
+			}	
+		}
+
+		$sql = 'SELECT * FROM ' . $this->tableName . ' WHERE user = ? ORDER BY '.$paramName ;
+		if($descending)
+			$sql .= ' DESC';
 		$params = array($user);
 		$result= $this->execute($sql,$params);
-	
+		
 		$entityList = array();
 		while($row = $result->fetchRow()){
 			$entity = new EBook($this->api,$row);
