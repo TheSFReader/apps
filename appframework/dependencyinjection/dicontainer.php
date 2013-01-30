@@ -73,9 +73,8 @@ class DIContainer extends \Pimple {
 		
 		// enables the l10n function as t() function in twig
 		$this['TwigL10N'] = $this->share(function($c){
-			$api = $c['API'];
-			return new \Twig_SimpleFunction('t', function () use ($api) {
-				$trans = $api->getTrans();
+			$trans = $c['API']->getTrans();;
+			return new \Twig_SimpleFunction('trans', function () use ($trans) {
 				return call_user_func_array(array($trans, 't'), func_get_args());
 			});
 		});
@@ -93,6 +92,24 @@ class DIContainer extends \Pimple {
 				return $api->getAbsoluteURL($url);
 			});
 		});
+
+		// enables the linkToRoute function as url() function in twig
+		$this['TwigLinkToRoute'] = $this->share(function($c){
+			$api = $c['API'];
+			return new \Twig_SimpleFunction('url', function () use ($api) {
+				return call_user_func_array(array($api, 'linkToRoute'), func_get_args());
+			});
+		});
+
+		// enables the linkToRoute function as url() function in twig
+		$this['TwigLinkToAbsoluteRoute'] = $this->share(function($c){
+			$api = $c['API'];
+			return new \Twig_SimpleFunction('abs_url', function () use ($api) {
+				$url = call_user_func_array(array($api, 'linkToRoute'), func_get_args());
+				return $api->getAbsoluteURL($url);
+			});
+		});
+
 
 		$this['TwigLoader'] = $this->share(function($c){
 			return new \Twig_Loader_Filesystem($c['TwigTemplateDirectory']);
