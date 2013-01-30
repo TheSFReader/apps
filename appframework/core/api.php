@@ -195,6 +195,15 @@ class API {
 	}
 
 	/**
+	 * Makes an URL absolute
+	 * @param string $url the url
+	 * @return string the absolute url
+	 */
+	public function getAbsoluteURL($url){
+		return \OC_Helper::makeURLAbsolute($url);
+	}
+	
+	/**
 	 * Returns the Absolute URL for a route
 	 * @return the url
 	 */

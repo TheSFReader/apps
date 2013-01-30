@@ -81,16 +81,16 @@ class DIContainer extends \Pimple {
 		});
 		$this['TwigLinkToRoute'] = $this->share(function($c){
 			$api = $c['API'];
-			return new \Twig_SimpleFunction('linkToRoute', function () use ($api) {
-				$trans = $api->getTrans();
+			return new \Twig_SimpleFunction('url', function () use ($api) {
 				return call_user_func_array(array($api, 'linkToRoute'), func_get_args());
 			});
 		});
-		$this['TwigLinkToRouteAbsolute'] = $this->share(function($c){
+		// enables the linkToRoute function as url() function in twig
+		$this['TwigLinkToAbsoluteRoute'] = $this->share(function($c){
 			$api = $c['API'];
-			return new \Twig_SimpleFunction('linkToRouteAbsolute', function () use ($api) {
-				$trans = $api->getTrans();
-				return call_user_func_array(array($api, 'linkToRouteAbsolute'), func_get_args());
+			return new \Twig_SimpleFunction('abs_url', function () use ($api) {
+				$url = call_user_func_array(array($api, 'linkToRoute'), func_get_args());
+				return $api->getAbsoluteURL($url);
 			});
 		});
 
@@ -113,8 +113,8 @@ class DIContainer extends \Pimple {
 			$api = $c['API'];
 			$twig->addGlobal('api',$api);
 			$twig->addFunction($c['TwigL10N']);
-			//$twig->addFunction($c['TwigLinkToRoute']);
-			//$twig->addFunction($c['TwigLinkToRouteAbsolute']);
+			$twig->addFunction($c['TwigLinkToRoute']);
+			$twig->addFunction($c['TwigLinkToAbsoluteRoute']);
 			return $twig;
 		});
 
