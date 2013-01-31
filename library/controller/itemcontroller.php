@@ -47,49 +47,7 @@ const OPDS_MIME_ENTRY = 'application/atom+xml;type=entry;profile=opds-catalog';
 # OpenSearch
 const OPENSEARCH_MIME = 'application/opensearchdescription+xml';
 
-// EBook Comparison functions for sorting
-function cmpNewest($a, $b)
-{
-	//throw new \Exception(var_dump($a));
-	$al = $a->Mtime();
-	$bl = $b->Mtime();
-	if ($al === $bl) {
-		return 0;
-	}
-	return ($al < $bl) ? +1 : -1;
-}
 
-function cmpAuthor($a, $b)
-{
-	$al = reset($a->Authors());
-	$bl = reset($b->Authors());
-	if ($al[0] === $bl[0]) {
-		return 0;
-	}
-	return ($al[0] > $bl[0]) ? +1 : -1;
-}
-
-function cmpTitle($a, $b)
-{
-	//throw new \Exception(var_dump($a));
-	$al = $a->Title();
-	$bl = $b->Title();
-	if ($al === $bl) {
-		return 0;
-	}
-	return ($al > $bl) ? +1 : -1;
-}
-
-function cmpPublisher($a, $b)
-{
-	//throw new \Exception(var_dump($a));
-	$al = $a->Publisher();
-	$bl = $b->Publisher();
-	if ($al === $bl) {
-		return 0;
-	}
-	return ($al > $bl) ? +1 : -1;
-}
 
 class ItemController extends Controller {
 	

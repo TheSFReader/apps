@@ -378,6 +378,18 @@ class API {
 	public function openEventSource(){
 		return new \OC_EventSource();
 	}
-
+	
+	
+	/**
+	 * @brief Creates path to an image
+	 * @param string $app app
+	 * @param string $image image name
+	 * @returns string the url
+	 *
+	 * Returns the path to the image.
+	 */
+	public function getImagePath($appliName, $imagePathInAppli){
+		return \OCP\Util::imagePath($appliName, $imagePathInAppli);
+	}
 
 }
