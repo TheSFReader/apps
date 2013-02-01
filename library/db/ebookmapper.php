@@ -153,7 +153,6 @@ class EBookMapper extends Mapper {
 		$params = array($user);
 		$result= $this->execute($sql,$params)->fetchrow();
 		
-		$this->api->log($sql . ' -->' . print_r($result,true));
 		return $result['maxMTime'];
 	}
 
@@ -189,7 +188,6 @@ class EBookMapper extends Mapper {
 		$this->execute($sql, $params);
 
 		$ebook->setId($this->api->getInsertId($this->tableName));
-		\OC_Log::write("EBookMappe::saver", "Inserted, ID = ".$ebook->getId(),4);
 	}
 
 
