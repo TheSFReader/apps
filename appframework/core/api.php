@@ -290,7 +290,9 @@ class API {
 	 * @return the id
 	 */
 	public function getId($path){
-		return \OC_FileCache::getId($path);
+		list($storage, $internalPath) = \OC\Files\Filesystem::resolvePath($path);
+		$cache = new \OC\Files\Cache\Cache($storage);
+		return $cache->getId($internalPath);
 	}
 	
 	/**
@@ -298,7 +300,7 @@ class API {
 	 * @return the id
 	 */
 	public function getPath($id){
-		return \OC_FileCache::getPath($id);
+		return \OC\Files\Filesystem::getPath($id);
 	}
 	
 	/**
@@ -306,7 +308,7 @@ class API {
 	 * @return the path
 	 */
 	public function getLocalFile($path){
-		return \OC_Filesystem::getLocalFile($path);
+		return \OC\Files\Filesystem::getLocalFile($path);
 	}
 	
 	/**
@@ -324,7 +326,7 @@ class API {
 	 * - versioned
 	 */
 	public function getFilesystemInfo($path){
-		return \OC_FileCache::get($path);
+		return  \OC\Files\Filesystem::getFileInfo($path);
 	}
 
 
@@ -367,7 +369,8 @@ class API {
 	 * @return string the filepath in the filesystem
 	 */
 	public function getLocalFilePath($path){
-		return \OC_Filesystem::getLocalFile($path);
+		$view = new \OC\Files\View('');	
+		return $view->getLocalFile($path);
 	}
 
 

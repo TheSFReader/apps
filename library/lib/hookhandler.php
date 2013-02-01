@@ -9,7 +9,7 @@ use OCA\Library\Lib\Cover;
 
 class HookHandler {
 	public static function writeFile($params) {
-		$path = $params[\OC_Filesystem::signal_param_path];
+		$path = $params[\OC\Files\Filesystem::signal_param_path];
 		if(isset($path) && $path !== '') {
 			$diContainer = new DIContainer();
 			$api = $diContainer['API'];
@@ -22,7 +22,7 @@ class HookHandler {
 	
 	public static function removeFile($params) {
 		
-		$path = $params[\OC_Filesystem::signal_param_path];
+		$path = $params[\OC\Files\Filesystem::signal_param_path];
 		try { 
 			$diContainer = new DIContainer();
 			$api = $diContainer['API'];
@@ -40,8 +40,8 @@ class HookHandler {
 	}
 	
 	public static function renameFile($params) {
-		$oldpath = $params[\OC_Filesystem::signal_param_oldpath];
-		$newpath = $params[\OC_Filesystem::signal_param_newpath];
+		$oldpath = $params[\OC\Files\Filesystem::signal_param_oldpath];
+		$newpath = $params[\OC\Files\Filesystem::signal_param_newpath];
 		
 		$diContainer = new DIContainer();
 		$api = $diContainer['API'];
