@@ -57,8 +57,11 @@ abstract class Mapper {
 		$row = $result->fetchRow();
 		if($row === null){
 			throw new DoesNotExistException('Item with id ' . $id . ' does not exist!');
-		} elseif($result->fetchRow() !== null) {
-			throw new MultipleObjectsReturnedException('More than one result for Item with id ' . $id . '!');
+		} else {
+			$nextRow = $result->fetchRow();
+			if( $nextRow !== null && nextRow !== false) {
+				throw new MultipleObjectsReturnedException('More than one result for Item with id ' . $id . '!');
+			}
 		}
 
 		return $row;
