@@ -7,7 +7,6 @@ require_once __DIR__ . '/../3rdparty/php-epub-meta-master/epub.php';
 Class EBook {
 	protected $api;
 	protected $ebookId;
-	protected $fileId;
 	protected $path;
 	protected $title;
 	protected $authors;
@@ -34,31 +33,18 @@ Class EBook {
 		
 		$this->api = $api;
 		$this->path = $path;
-		$this->fileId = $this->api->getId($path);
+		$this->ebookId=-1;
 		
-		if($this->fileId === -1) {
-			$this->path = $this->api->getPath($path);
-			$this->fileId = $path;
-		}
-		$this->ebookId=$this->fileId;
-		$localFile = $this->api->getLocalFile($this->path);
 		$info = $this->api->getFilesystemInfo($this->path);
 		$this->mtime = $info['mtime'];
 		$dt = new \DateTime();
 		$dt->setTimestamp($this->mtime);
 		$this->updated = $dt->format(\DateTime::ATOM);
 		
-		
+		$this->fromEpubPath($api,$path);
 		//FIXME
 		$downloadURL=$this->api->linkToAbsolute('ajax/download.php','files', array('files' => $this->path));
 		$this->formats = array('epub'=>$downloadURL);
-		
-		$this->thumbnailLink = $this->api->linkToRouteAbsolute('library_thumbnail', array('id' => $this->fileId));
-		$this->coverLink = $this->api->linkToRouteAbsolute('library_cover', array('id' => $this->fileId));
-		$this->detailsLink = $this->api->linkToRouteAbsolute('library_details', array('id' => $this->fileId));
-		
-
-		$this->epub = new \EPub($localFile);
 		
 		
 	}
@@ -66,7 +52,6 @@ Class EBook {
 	function fromRow($api, $row) {
 		$this->api = $api;
 		$this->ebookId =$row['id'];
-		$this->fileId =$row['fileid'];
 		$this->path =$row['filepath'];
 		$this->authors = json_decode ($row['authors'], true);
 		$this->title =$row['title'];
@@ -81,22 +66,31 @@ Class EBook {
 		$this->coverLink =$row['coverLink'];
 		$this->thumbnailLink =$row['thumbnailLink'];
 		
-		//FIXME
 		$downloadURL=$this->api->linkToAbsolute('ajax/download.php','files', array('files' => $this->path));
 		$this->formats = array('epub'=>$downloadURL);
-		
-
-		$localFile = $this->api->getLocalFile($this->path);
-		$this->epub = new \EPub($localFile);
-		
 
 	}
 	
+	function fromEpubPath($api, $epubPath) {
+		$this->api = $api;
+		
+		$localFile = $this->api->getLocalFile($epubPath);
+		$epub = new \EPub($localFile);
+		
+		$this->path=$epubPath;
+		$this->title=$epub->Title();
+		$this->isbn=$epub->ISBN();
+		$this->authors=$epub->Authors();
+		$this->description=$epub->Description();
+		$this->subjects=$epub->Subjects();
+		$this->date=$epub->Date();
+		$this->language=$epub->Language();
+		$this->publisher=$epub->Publisher();
+		
+		$downloadURL=$this->api->linkToAbsolute('ajax/download.php','files', array('files' => $epubPath));
+		$this->formats = array('epub'=>$downloadURL);
 	
-	
-	
-	
-	
+	}
 	
 	public function getId(){
 		return $this->ebookId;
@@ -104,10 +98,11 @@ Class EBook {
 	
 	public function setId($id){
 		$this->ebookId = $id;
-	}
-	
-	public function FileId(){
-		return $this->fileId;
+		
+		$this->thumbnailLink = $this->api->linkToRouteAbsolute('library_thumbnail', array('id' => $id));
+		$this->coverLink = $this->api->linkToRouteAbsolute('library_cover', array('id' => $id));
+		$this->detailsLink = $this->api->linkToRouteAbsolute('library_details', array('id' => $id));
+		
 	}
 	
 	public function Path(){
