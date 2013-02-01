@@ -16,7 +16,7 @@
   	{% for ebook in ebooks %}
 	<entry>
 		<title>{{ ebook.Title }}</title>
-		<id>/item/{{ ebook.getId }}</id>
+		<id>{{userName}}:/ebook/{{ ebook.getId }}</id>
 		{% if ebook.ISBN %}<dcterms:identifier xsi:type="dcterms:URI">urn:ISBN:{{ ebook.ISBN }}</dcterms:identifier>{% endif %}
 		
 		{% for author in ebook.Authors %}<author><name>{{ author}}</name></author>{% endfor %}

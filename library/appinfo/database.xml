@@ -51,13 +51,6 @@
 				<notnull>true</notnull>
 				<length>64</length>
 			</field>
-			<field>				
-				<name>fileid</name>
-				<type>integer</type>
-				<default>-1</default>
-				<length>4</length>
-			</field>
-			
 			<field>
 				<name>authors</name>
 				<type>clob</type>

@@ -197,14 +197,16 @@ class ItemController extends Controller {
 		$this->api->addStyle('style');
 	
 		$id = $this->params('id');
-		$ebook = new EBook($this->api, $id);
-	
+		$mapper = new EBookMapper ($this->api);
+		$ebook = $mapper->find($id);
+		
 		$templateName = 'details';
 		$params = array(
 				'ebook' => $ebook,
 				'indexLink' => $this->api->linkToRoute('library_index'),
 		);
 		return $this->render($templateName, $params);
+		
 	}
 	
 
@@ -221,8 +223,9 @@ class ItemController extends Controller {
 	public function cover(){
 	
 		$id = $this->params('id');
-		$path = $this->api->getPath($id);
-		return Cover::getCover($this->api, $path);
+		$mapper = new EBookMapper ($this->api);
+		$ebook = $mapper->find($id);
+		return Cover::getCover($this->api, $ebook);
 	}
 	
 	/**
@@ -237,8 +240,9 @@ class ItemController extends Controller {
 	 */
 	public function thumbnail(){
 		$id = $this->params('id');
-		$path = $this->api->getPath($id);
-		return Cover::getThumbnail($this->api, $path);
+		$mapper = new EBookMapper ($this->api);
+		$ebook = $mapper->find($id);
+		return Cover::getThumbnail($this->api, $ebook);
 	}
 	
 	/**

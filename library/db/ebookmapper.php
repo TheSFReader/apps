@@ -48,7 +48,7 @@ class EBookMapper extends Mapper {
 	 */
 	public function find($id){
 		$row = $this->findQuery($this->tableName, $id);
-		return new EBook($api, $row);
+		return new EBook($this->api, $row);
 		
 	}
 
@@ -65,7 +65,7 @@ class EBookMapper extends Mapper {
 
 		$result = $this->execute($sql, $params)->fetchRow();
 		if($result){
-			return new EBook($api, $result);
+			return new EBook($this->api, $result);
 		} else {
 			throw new DoesNotExistException('EBook with user id ' . $userId . ' does not exist!');
 		}
@@ -83,7 +83,7 @@ class EBookMapper extends Mapper {
 	
 		$result = $this->execute($sql, $params)->fetchRow();
 		if($result){
-			return new EBook($api, $result);
+			return new EBook($this->api, $result);
 		} else {
 			throw new DoesNotExistException('EBook with path ' . $path . ' does not exist for user $user!');
 		}
@@ -164,13 +164,12 @@ class EBookMapper extends Mapper {
 	 * @return the item with the filled in id
 	 */
 	public function save($ebook, $user){
-		$sql = 'INSERT INTO '. $this->tableName . '(user, fileid, filepath, authors, title, subjects, mtime, '.
+		$sql = 'INSERT INTO '. $this->tableName . '(user, filepath, authors, title, subjects, mtime, '.
 				'updated, description, isbn, language, publisher, detailslink, coverlink, thumbnaillink)'.
-				' VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+				' VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
 		$params = array(
 			$user,
-			$ebook->FileId(),
 			$ebook->Path(),
 			json_encode($ebook->Authors()),
 			$ebook->Title(),
@@ -200,7 +199,6 @@ class EBookMapper extends Mapper {
 	 */
 	public function update($ebook){
 		$sql = 'UPDATE '. $this->tableName . ' SET
-			fileid = ?,
 			filepath = ?,
 			authors = ?,
 			title = ?,
@@ -217,7 +215,6 @@ class EBookMapper extends Mapper {
 			WHERE id = ?';
 
 		$params = array(
-			$ebook->FileId(),
 			$ebook->Path(),
 			json_encode($ebook->Authors()),
 			$ebook->Title(),

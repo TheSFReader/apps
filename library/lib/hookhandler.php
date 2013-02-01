@@ -17,6 +17,8 @@ class HookHandler {
 			$userId = $api->getUserId();
 			$ebookMapper = $diContainer['EBookMapper'];
 			$ebookMapper->save($ebook,$userId);
+			// We update so that it stores the updated links
+			$ebookMapper->update($ebook,$userId);
 		}
 	}
 	
@@ -27,7 +29,11 @@ class HookHandler {
 			$diContainer = new DIContainer();
 			$api = $diContainer['API'];
 
-			Cover::clear($api,$path);
+			$mapper = new EBookMapper ($api);
+			$userId = $api->getUserId();
+			$ebook = $mapper->findByPathAndUserId($path,$userId);
+			
+			Cover::clear($api,$ebook);
 			
 			$userId = $api->getUserId();
 			$ebookMapper = $diContainer['EBookMapper'];
@@ -45,7 +51,13 @@ class HookHandler {
 		
 		$diContainer = new DIContainer();
 		$api = $diContainer['API'];
-		Cover::clear($api,$oldpath);
+		
+		$mapper = new EBookMapper ($api);
+		$userId = $api->getUserId();
+		$ebook = $mapper->findByPathAndUserId($oldpath,$userId);
+
+		Cover::clear($api,$ebook);
+		
 		$userId = $api->getUserId();
 		$ebookMapper = $diContainer['EBookMapper'];
 		$ebookMapper->updateEbookPath($oldpath, $newpath, $userId);
@@ -60,7 +72,8 @@ class HookHandler {
 		$results = $ebookMapper->findAllForUser($uid);
 		
 		foreach($results as $ebook) {
-			Cover::clear($api,$ebook->getPath());
+			$ebook = $ebookMapper->findByPathAndUserId($oldpath,$userId);
+			Cover::clear($api,$ebook);
 			
 			$ebookMapper->delete($ebook->getId());
 		}
