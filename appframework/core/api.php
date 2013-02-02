@@ -285,26 +285,10 @@ class API {
 		\OC_App::isEnabled($appName);
 	}
 	
+
+
 	/**
-	 * Returns the internal Id for a file path
-	 * @return the id
-	 */
-	public function getId($path){
-		list($storage, $internalPath) = \OC\Files\Filesystem::resolvePath($path);
-		$cache = new \OC\Files\Cache\Cache($storage);
-		return $cache->getId($internalPath);
-	}
-	
-	/**
-	 * Returns the internal Id for a file path
-	 * @return the id
-	 */
-	public function getPath($id){
-		return \OC\Files\Filesystem::getPath($id);
-	}
-	
-	/**
-	 * Returns the local file path
+	 * Returns a local file path
 	 * @return the path
 	 */
 	public function getLocalFile($path){
