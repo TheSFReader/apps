@@ -85,7 +85,7 @@ class EBookMapper extends Mapper {
 		if($result){
 			return new EBook($this->api, $result);
 		} else {
-			throw new DoesNotExistException('EBook with path ' . $path . ' does not exist for user $user!');
+			throw new DoesNotExistException("EBook with path $path does not exist for user $user!");
 		}
 	}
 
@@ -261,7 +261,7 @@ class EBookMapper extends Mapper {
 	 */
 	public function updateEbookPath($oldpath,$newpath, $user){
 		$sql = 'UPDATE '. $this->tableName . ' SET filepath = ? WHERE filepath = ? and user = ?';
-		$params = array($newpath, $oldpath);
+		$params = array($newpath, $oldpath,$user);
 		$this->execute($sql, $params);
 	}
 
