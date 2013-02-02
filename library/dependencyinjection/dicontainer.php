@@ -25,10 +25,10 @@ namespace OCA\Library\DependencyInjection;
 
 use OCA\AppFramework\DependencyInjection\DIContainer as BaseContainer;
 
-use OCA\Library\Controller\ItemController as ItemController;
+use OCA\Library\Controller\LibraryController;
 use OCA\Library\Controller\SettingsController as SettingsController;
 use OCA\Library\Db\ItemMapper as ItemMapper;
-use OCA\Library\Db\EBookMapper as EBookMapper;
+use OCA\Library\Db\EBookMapper;
 
 
 class DIContainer extends BaseContainer {
@@ -44,8 +44,8 @@ class DIContainer extends BaseContainer {
 		/** 
 		 * CONTROLLERS
 		 */
-		$this['ItemController'] = $this->share(function($c){
-			return new ItemController($c['API'], $c['Request'], $c['EBookMapper']);
+		$this['LibraryController'] = $this->share(function($c){
+			return new LibraryController($c['API'], $c['Request'], $c['EBookMapper']);
 		});
 
 		$this['SettingsController'] = $this->share(function($c){

@@ -46,21 +46,19 @@ class HookHandler {
 	}
 	
 	public static function renameFile($params) {
+		
+		
 		$oldpath = $params[\OC\Files\Filesystem::signal_param_oldpath];
 		$newpath = $params[\OC\Files\Filesystem::signal_param_newpath];
 		
 		$diContainer = new DIContainer();
 		$api = $diContainer['API'];
-		
+		$userId = $api->getUserId();
 		$mapper = new EBookMapper ($api);
-		$userId = $api->getUserId();
-		$ebook = $mapper->findByPathAndUserId($oldpath,$userId);
-
-		Cover::clear($api,$ebook);
 		
-		$userId = $api->getUserId();
-		$ebookMapper = $diContainer['EBookMapper'];
-		$ebookMapper->updateEbookPath($oldpath, $newpath, $userId);
+		$ebook = $mapper->findByPathAndUserId($oldpath,$userId);
+		Cover::clear($api,$ebook);
+		$mapper->updateEbookPath($oldpath, $newpath, $userId);
 	}
 	
 	public static function removeUser($params) {

@@ -37,59 +37,66 @@ use \OCA\Library\DependencyInjection\DIContainer as DIContainer;
  */
 $this->create('library_index', '/')->action(
 	function($params){
-		App::main('ItemController', 'index', $params, new DIContainer());
+		App::main('LibraryController', 'index', $params, new DIContainer());
 	}
+);
+
+$this->create('library_index_rescan', '/rescan')->action(
+		function($params){
+			$params['action'] = 'rescan';
+			App::main('LibraryController', 'rescan', $params, new DIContainer());
+		}
 );
 
 /*
 $this->create('library_index2', '/{sortby}')->defaults(array('sortby' => 'newest'))->action(
 		function($params){
 			\OC_Log::write("Library",var_export($params,true),4);
-			App::main('ItemController', 'index', $params, new DIContainer());
+			App::main('LibraryController', 'index', $params, new DIContainer());
 		}
 );*/
 
 
 $this->create('library_opds', '/opds')->action(
 		function($params){
-			App::main('ItemController', 'opds', $params, new DIContainer());
+			App::main('LibraryController', 'opds', $params, new DIContainer());
 		}
 );
 
 $this->create('library_opds_all', '/opds/all')->action(
 		function($params){
-			App::main('ItemController', 'opds_all', $params, new DIContainer());
+			App::main('LibraryController', 'opds_all', $params, new DIContainer());
 		}
 );
 
 $this->create('library_opds_new', '/opds/new')->action(
 		function($params){
-			App::main('ItemController', 'opds_new', $params, new DIContainer());
+			App::main('LibraryController', 'opds_new', $params, new DIContainer());
 		}
 );
 
 $this->create('library_index_sort', '/sortby/{sortby}')->action(
 		function($params){
 			
-			App::main('ItemController', 'index', $params, new DIContainer());
+			App::main('LibraryController', 'index', $params, new DIContainer());
 		}
 );
 
 $this->create('library_index_sort_paginated', '/sortby/{sortby}/{page}')->action(
 		function($params){
-			App::main('ItemController', 'index', $params, new DIContainer());
+			App::main('LibraryController', 'index', $params, new DIContainer());
 		}
 );
 
 $this->create('library_details', '/ebook/{id}')->action(
 		function($params){
-			App::main('ItemController', 'details', $params, new DIContainer());
+			App::main('LibraryController', 'details', $params, new DIContainer());
 		}
 );
 
 $this->create('library_cover', '/cover/{id}')->action(
 		function($params){
-			App::main('ItemController', 'cover', $params, new DIContainer());
+			App::main('LibraryController', 'cover', $params, new DIContainer());
 		}
 );
 
@@ -97,7 +104,7 @@ $this->create('library_cover', '/cover/{id}')->action(
 
 $this->create('library_thumbnail', '/thumbnail/{id}')->action(
 		function($params){
-			App::main('ItemController', 'thumbnail', $params, new DIContainer());
+			App::main('LibraryController', 'thumbnail', $params, new DIContainer());
 		}
 );
 
@@ -108,13 +115,13 @@ $this->create('library_thumbnail', '/thumbnail/{id}')->action(
 
 $this->create('library_index_param', '/test/{test}')->action(
 	function($params){
-		App::main('ItemController', 'index', $params, new DIContainer());
+		App::main('LibraryController', 'index', $params, new DIContainer());
 	}
 );
 
 $this->create('library_index_redirect', '/redirect')->action(
 	function($params){
-		App::main('ItemController', 'redirectToIndex', $params, new DIContainer());
+		App::main('LibraryController', 'redirectToIndex', $params, new DIContainer());
 	}
 );
 
@@ -123,6 +130,6 @@ $this->create('library_index_redirect', '/redirect')->action(
  */
 $this->create('library_ajax_setsystemvalue', '/setsystemvalue')->post()->action(
 	function($params){
-		App::main('ItemController', 'setSystemValue', $params, new DIContainer());
+		App::main('LibraryController', 'setSystemValue', $params, new DIContainer());
 	}
 );

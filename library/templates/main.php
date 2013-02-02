@@ -1,7 +1,11 @@
 <div id="app">
   <h1 class="heading">{{ trans("%s's Library",userName) }}</h1>
-<a href="{{ thisLink }}">This</a><BR/>
-<a href="{{ url('library_opds') }}">OPDS</a><BR/>
+
+ <table>
+ <tr><td><a href="{{ thisLink }}">This</a></td>
+<td><a href="{{ url('library_opds') }}">OPDS</a></td>
+<td><a href="{{ url('library_index_rescan') }}">Re-Scan</a></td>
+</tr></table>
 {% if ebooks |length > 0 %}
     <table>
 	<thead>
