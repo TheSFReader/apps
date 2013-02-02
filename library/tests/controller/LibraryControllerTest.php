@@ -33,12 +33,12 @@ use OCA\Library\Db\Item as Item;
 require_once(__DIR__ . "/../classloader.php");
 
 
-class ItemControllerTest extends ControllerTestUtility {
+class LibraryControllerTest extends ControllerTestUtility {
 
 
 	public function testRedirectToIndexAnnotations(){
 		$api = $this->getAPIMock();
-		$controller = new ItemController($api, new Request(), null);
+		$controller = new LibraryController($api, new Request(), null);
 		$methodName = 'redirectToIndex';
 		$annotations = array('CSRFExemption', 'IsAdminExemption', 'IsSubAdminExemption');
 
@@ -48,7 +48,7 @@ class ItemControllerTest extends ControllerTestUtility {
 
 	public function testIndexAnnotations(){
 		$api = $this->getAPIMock();
-		$controller = new ItemController($api, new Request(), null);
+		$controller = new LibraryController($api, new Request(), null);
 		$methodName = 'index';
 		$annotations = array('CSRFExemption', 'IsAdminExemption', 'IsSubAdminExemption');
 
@@ -65,7 +65,7 @@ class ItemControllerTest extends ControllerTestUtility {
 
 		$itemMapperMock = $this->getMock('ItemMapper', array('findByUserId'));
 
-		$controller = new ItemController($api, new Request(), $itemMapperMock);
+		$controller = new LibraryController($api, new Request(), $itemMapperMock);
 
 		$response = $controller->index();
 		$params = $response->getParams();
@@ -90,7 +90,7 @@ class ItemControllerTest extends ControllerTestUtility {
 					->method('findByUserId')
 					->will($this->returnValue($item));
 		
-		$controller = new ItemController($api, new Request(), $itemMapperMock);
+		$controller = new LibraryController($api, new Request(), $itemMapperMock);
 
 		$response = $controller->index();
 		$params = $response->getParams();
@@ -109,7 +109,7 @@ class ItemControllerTest extends ControllerTestUtility {
 					->method('findByUserId')
 					->will($this->throwException(new DoesNotExistException('')));
 
-		$controller = new ItemController($api, new Request(), $itemMapperMock);
+		$controller = new LibraryController($api, new Request(), $itemMapperMock);
 
 		$response = $controller->index();
 		$params = $response->getParams();
@@ -122,7 +122,7 @@ class ItemControllerTest extends ControllerTestUtility {
 
 	public function testSetSystemValueAnnotations(){
 		$api = $this->getAPIMock();
-		$controller = new ItemController($api, new Request(), null);	
+		$controller = new LibraryController($api, new Request(), null);	
 		$methodName = 'setSystemValue';
 		$annotations = array('Ajax');
 
@@ -150,7 +150,7 @@ class ItemControllerTest extends ControllerTestUtility {
 					->method('getAppName')
 					->will($this->returnValue('library'));
 
-		$controller = new ItemController($api, $request, null);
+		$controller = new LibraryController($api, $request, null);
 		$response = $controller->setSystemValue(null);
 
 		// check if the correct parameters of the json response are set
