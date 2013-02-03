@@ -2,49 +2,47 @@
 
 namespace OCA\Library\Lib;
 
-use \OCA\AppFramework\Http\Response as Response;
-
 
 require_once __DIR__ . '/../3rdparty/php-epub-meta-master/epub.php';
 
 //FIXME This would need to be API ified.
-class Cover extends Response {
-	protected $image;
+class Cover {
+	protected $api;
+	protected $ebook;
 	
-	function __construct($image) {
-		parent::__construct();
-		$this->image = $image;
+	function __construct($api, $ebook) {
+		$this->api = $api;
+		$this->ebook = $ebook;
 	}
-	function render() {
-		parent::render();
-		if($this->image !== null)
-			$this->image->show();
-	}
+	
 
-	public static function clear($api, $ebook) {
+	public function clearImages() {
 		$view = \OCP\Files::getStorage('library');
-		$thumnail_file = $ebook->getId().".thmb";
+		$thumnail_file = $this->ebook->getId().".thmb";
 		if ($view->file_exists($thumnail_file)) {
 			$view->unlink($thumnail_file);
 		}
-		$cover_file = $ebook->getId().".cvr";
+		$cover_file = $this->ebook->getId().".cvr";
 		if ($view->file_exists($cover_file)) {
 			$view->unlink($cover_file);
 		}
 		
 	}
-	public static function getThumbnail($api, $ebook) {
+	public function getThumbnailImage() {
 		
 		$view = \OCP\Files::getStorage('library');
 
-		$cover_file = $ebook->getId().".thmb";
+		$cover_file = $this->ebook->getId().".thmb";
 		if ($view->file_exists($cover_file)) {
-			$image = new \OC_Image($view->fopen($cover_file, 'r'));
+			$file = $view->fopen($cover_file, 'r');
+			$image = new \OC_Image($file);
 		}else {
-			$localFile = $api->getLocalFile($ebook->Path());
+			$localFile = $this->api->getLocalFile($this->ebook->Path());
 			$epub = @new \EPub($localFile);
 			$cover = $epub->Cover();
+			$this->api->log("recreating $cover_file");
 			$image=new \OC_Image($cover['data']);
+			$this->api->log("saving $cover_file");
 			$image->fixOrientation();
 			$image->resize(200);
 			$image->save($view->getLocalFile($cover_file));
@@ -52,22 +50,22 @@ class Cover extends Response {
 
 
 		if ($image->valid()) {
-			return new Cover($image);
+			return $image;
 		} else {
 			$image->destroy();
 		}
 		return null;
 	}
 
-	public static function getCover($api, $ebook) {
+	public function getCoverImage() {
 
 		$view = \OCP\Files::getStorage('library');
 
-		$cover_file = $ebook->getId().".cvr";
+		$cover_file = $this->ebook->getId().".cvr";
 		if ($view->file_exists($cover_file)) {
 			$image = new \OC_Image($view->fopen($cover_file, 'r'));
 		}else {
-			$localFile = $api->getLocalFile($ebook->Path());
+			$localFile = $this->api->getLocalFile($this->ebook->Path());
 			$epub = @new \EPub($localFile);
 			$cover = $epub->Cover();
 			$image=new \OC_Image($cover['data']);
@@ -76,7 +74,7 @@ class Cover extends Response {
 		}
 
 		if ($image->valid()) {
-			return new Cover($image);
+			return $image;
 		} else {
 			$image->destroy();
 		}

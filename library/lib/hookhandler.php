@@ -22,10 +22,14 @@ class HookHandler {
 	}
 	
 	public static function writeFile($params) {
+		$diContainer = new DIContainer();
+		$api = $diContainer['API'];
+		
 		$path = $params[\OC\Files\Filesystem::signal_param_path];
+		
+		$api->log("Adding $path");
 		if(isset($path) && $path !== '') {
-			$diContainer = new DIContainer();
-			$api = $diContainer['API'];
+			
 			$ebook = new EBook($api,  $path);
 			$userId = $api->getUserId();
 			$ebookMapper = $diContainer['EBookMapper'];
@@ -37,16 +41,20 @@ class HookHandler {
 	
 	public static function removeFile($params) {
 		
+		
 		$path = $params[\OC\Files\Filesystem::signal_param_path];
 		try { 
 			$diContainer = new DIContainer();
 			$api = $diContainer['API'];
 
+			$api->log("Removing $path");
+			
 			$mapper = new EBookMapper ($api);
 			$userId = $api->getUserId();
 			$ebook = $mapper->findByPathAndUserId($path,$userId);
 			
-			Cover::clear($api,$ebook);
+			$cover= new Cover($api,$ebook);
+			$cover->clearImages();
 			
 			$userId = $api->getUserId();
 			$ebookMapper = $diContainer['EBookMapper'];
@@ -66,6 +74,9 @@ class HookHandler {
 		
 		$diContainer = new DIContainer();
 		$api = $diContainer['API'];
+		
+		$api->log("Renaming $oldpath to $newpath");
+		
 		$userId = $api->getUserId();
 		$mapper = new EBookMapper ($api);
 		
@@ -101,9 +112,11 @@ class HookHandler {
 		$fsEPubFiles = $this->api->searchByMime('application/epub+zip');
 		$userid=$this->api->getUserId();
 		$ebooks = $this->ebookMapper->findAllForUser($userid);
+		$ebooksByPaths = array();
 		foreach ($ebooks as $ebook) {
 			$ebooksByPaths[]=$ebook->Path();
 		}
+		$epubFilesByPaths = array();
 		foreach ($fsEPubFiles as $epubFile) {
 			$path = $this->api->getPath($epubFile['fileid']);
 			$epubFilesByPaths[]=$path;

@@ -23,9 +23,10 @@
 
 namespace OCA\Library\Controller;
 
-use OCA\AppFramework\Controller\Controller as Controller;
-use OCA\AppFramework\Db\DoesNotExistException as DoesNotExistException;
-use OCA\AppFramework\Http\RedirectResponse as RedirectResponse;
+use OCA\AppFramework\Controller\Controller;
+use OCA\AppFramework\Db\DoesNotExistException;
+use OCA\AppFramework\Http\RedirectResponse;
+use \OCA\AppFramework\Http\ImageResponse;
 
 
 use OCA\Library\Db\EBookMapper;
@@ -241,7 +242,8 @@ class LibraryController extends Controller {
 		$mapper = new EBookMapper ($this->api);
 		$ebook = $mapper->find($id);
 		$this->api->log(print_r($ebook,true));
-		return Cover::getCover($this->api, $ebook);
+		$cover = new Cover($this->api, $ebook);
+		return new ImageResponse($cover->getCoverImage());
 	}
 	
 	/**
@@ -258,7 +260,8 @@ class LibraryController extends Controller {
 		$id = $this->params('id');
 		$mapper = new EBookMapper ($this->api);
 		$ebook = $mapper->find($id);
-		return Cover::getThumbnail($this->api, $ebook);
+		$cover = new Cover($this->api, $ebook);
+		return new ImageResponse($cover->getThumbnailImage());
 	}
 	
 	/**
