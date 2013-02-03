@@ -378,5 +378,28 @@ class API {
 	public function getImagePath($appliName, $imagePathInAppli){
 		return \OCP\Util::imagePath($appliName, $imagePathInAppli);
 	}
+	
+	/**
+	 * search for files by mimetype
+	 *
+	 * @param string $mimetype
+	 * @return array
+	 */
+	public function searchByMime($mimetype) {
+		return \OC\Files\Filesystem::searchByMime($mimetype);
+	}
+	
+	/**
+	 * Get the path of a file by id
+	 *
+	 * Note that the resulting path is not guarantied to be unique for the id, multiple paths can point to the same file
+	 *
+	 * @param int $id
+	 * @return string
+	 */
+	public static function getPath($id) {
+		return \OC\Files\Filesystem::getPath($id);
+	}
+	
 
 }
