@@ -75,6 +75,39 @@ class LibraryController extends Controller {
 		return new RedirectResponse($url);
 	}
 
+	/**
+	 * @CSRFExemption
+	 * @IsAdminExemption
+	 * @IsSubAdminExemption
+	 *
+	 * Redirects to the index page
+	 */
+	public function rescan(){
+		
+		$fsEPubFiles = $this->api->searchByMime('application/epub+zip');
+		$ebookMapper = new EBookMapper($this->api);
+		$userid=$this->api->getUserId();
+		$ebooks = $ebookMapper->findAllForUser($userid);
+		foreach ($ebooks as $ebook) {
+			$ebooksByPaths[]=$ebook->Path();
+		}
+		foreach ($fsEPubFiles as $epubFile) {
+			$path = $this->api->getPath($epubFile['fileid']);
+			$epubFilesByPaths[]=$path;
+		}
+		$ebooksWithNoFile = array_diff($ebooksByPaths, $epubFilesByPaths);
+		foreach($ebooksWithNoFile as $missingFilePath) {
+			$ebookMapper->deleteByPath($missingFilePath, $userid);
+		}
+		$filesWithNoEbook = array_diff($epubFilesByPaths,$ebooksByPaths);
+		foreach($filesWithNoEbook as $missingEBookPath) {
+			$ebook = new EBook($this->api,  $missingEBookPath);
+			$ebookMapper->save($ebook,$userid);
+			// We update so that it stores the updated links
+			$ebookMapper->update($ebook,$userid);
+		}
+		return $this->redirectToIndex();
+	}
 
 	/**
 	 * @CSRFExemption
