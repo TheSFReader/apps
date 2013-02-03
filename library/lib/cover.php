@@ -40,11 +40,13 @@ class Cover {
 			$localFile = $this->api->getLocalFile($this->ebook->Path());
 			$epub = @new \EPub($localFile);
 			$cover = $epub->Cover();
-			$this->api->log("recreating $cover_file");
+			$this->api->log(var_export($cover,true));
+			
 			$image=new \OC_Image($cover['data']);
-			$this->api->log("saving $cover_file");
-			$image->fixOrientation();
-			$image->resize(200);
+			if($image->width() > 1) {
+				$image->fixOrientation();
+				$image->resize(200);
+			}
 			$image->save($view->getLocalFile($cover_file));
 		}
 
