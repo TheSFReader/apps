@@ -8,6 +8,19 @@ use OCA\Library\DependencyInjection\DIContainer;
 use OCA\Library\Lib\Cover;
 
 class HookHandler {
+	
+	protected $api;
+	protected $ebookMapper;
+	/**
+	 * @param Request $request: an instance of the request
+	 * @param API $api: an api wrapper instance
+	 * @param EBookMapper $ebookMapper: an ebookMapper instance
+	 */
+	public function __construct($api, $ebookMapper){
+		$this->api=$api;
+		$this->ebookMapper = $ebookMapper;
+	}
+	
 	public static function writeFile($params) {
 		$path = $params[\OC\Files\Filesystem::signal_param_path];
 		if(isset($path) && $path !== '') {
@@ -74,6 +87,37 @@ class HookHandler {
 			Cover::clear($api,$ebook);
 			
 			$ebookMapper->delete($ebook->getId());
+		}
+	}
+	
+	public static function rescan($params) {
+		$api = $diContainer['API'];
+		$ebookMapper = $diContainer['EBookMapper'];
+		$hh = new HookHandler($api, $ebookMapper);
+		$hh->rescanImpl();
+	}
+	
+	public function rescanImpl() {
+		$fsEPubFiles = $this->api->searchByMime('application/epub+zip');
+		$userid=$this->api->getUserId();
+		$ebooks = $this->ebookMapper->findAllForUser($userid);
+		foreach ($ebooks as $ebook) {
+			$ebooksByPaths[]=$ebook->Path();
+		}
+		foreach ($fsEPubFiles as $epubFile) {
+			$path = $this->api->getPath($epubFile['fileid']);
+			$epubFilesByPaths[]=$path;
+		}
+		$ebooksWithNoFile = array_diff($ebooksByPaths, $epubFilesByPaths);
+		foreach($ebooksWithNoFile as $missingFilePath) {
+			$this->ebookMapper->deleteByPath($missingFilePath, $userid);
+		}
+		$filesWithNoEbook = array_diff($epubFilesByPaths,$ebooksByPaths);
+		foreach($filesWithNoEbook as $missingEBookPath) {
+			$ebook = new EBook($this->api,  $missingEBookPath);
+			$this->ebookMapper->save($ebook,$userid);
+			// We update so that it stores the updated links
+			$this->ebookMapper->update($ebook,$userid);
 		}
 	}
 }
