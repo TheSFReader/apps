@@ -27,7 +27,6 @@ class HookHandler {
 		
 		$path = $params[\OC\Files\Filesystem::signal_param_path];
 		
-		$api->log("Adding $path");
 		if(isset($path) && $path !== '') {
 			
 			$ebook = new EBook($api,  $path);
@@ -47,7 +46,6 @@ class HookHandler {
 			$diContainer = new DIContainer();
 			$api = $diContainer['API'];
 
-			$api->log("Removing $path");
 			
 			$mapper = new EBookMapper ($api);
 			$userId = $api->getUserId();
@@ -74,8 +72,6 @@ class HookHandler {
 		
 		$diContainer = new DIContainer();
 		$api = $diContainer['API'];
-		
-		$api->log("Renaming $oldpath to $newpath");
 		
 		$userId = $api->getUserId();
 		$mapper = new EBookMapper ($api);

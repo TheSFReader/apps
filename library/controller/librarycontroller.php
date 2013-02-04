@@ -53,15 +53,16 @@ const OPENSEARCH_MIME = 'application/opensearchdescription+xml';
 
 class LibraryController extends Controller {
 	
-
+	protected $libraryStorage;
 	/**
 	 * @param Request $request: an instance of the request
 	 * @param API $api: an api wrapper instance
 	 * @param ItemMapper $itemMapper: an itemwrapper instance
 	 */
-	public function __construct($api, $request, $itemMapper){
+	public function __construct($api, $request, $ebookMapper, $libraryStorage){
 		parent::__construct($api, $request);
-		$this->itemMapper = $itemMapper;
+		$this->ebookMapper = $ebookMapper;
+		$this->libraryStorage = $libraryStorage;
 	}
 
 
@@ -86,8 +87,7 @@ class LibraryController extends Controller {
 	 */
 	public function rescan(){
 		
-		$ebookMapper = new EBookMapper($this->api);
-		$hh = new HookHandler($this->api,$ebookMapper);
+		$hh = new HookHandler($this->api,$this->ebookMapper);
 		$hh->rescanImpl();
 		return $this->redirectToIndex();
 	}
@@ -105,10 +105,8 @@ class LibraryController extends Controller {
 		// your own stuff
 		$this->api->addStyle('style');
 
-		$ebookMapper = new EBookMapper($this->api);
-		
 		$sortby = $this->params('sortby');
-		$ebooks = $ebookMapper->findAllForUser($this->api->getUserId(),$sortby);
+		$ebooks = $this->ebookMapper->findAllForUser($this->api->getUserId(),$sortby);
 		
 		$templateName = 'main';
 		$paramsIn =  $this->getParams();
@@ -141,8 +139,7 @@ class LibraryController extends Controller {
 		
 		$templateName = 'opds_index';
 		
-		$ebookMapper = new EBookMapper($this->api);
-		$mtime = $ebookMapper->latestMTime($this->api->getUserId());
+		$mtime = $this->ebookMapper->latestMTime($this->api->getUserId());
 		$currentTime = new \DateTime();
 		if($mtime!== null) {
 			$currentTime->setTimestamp($mtime);
@@ -175,11 +172,10 @@ class LibraryController extends Controller {
 	
 		$templateName = 'opds_acquisition';
 		
-		$ebookMapper = new EBookMapper($this->api);
-		$ebooks = $ebookMapper->findAllForUser($this->api->getUserId(),'newest');
+		$ebooks = $this->ebookMapper->findAllForUser($this->api->getUserId(),'newest');
 		
 		$currentTime = new \DateTime();
-		$mtime = $ebookMapper->latestMTime($this->api->getUserId());
+		$mtime = $this->ebookMapper->latestMTime($this->api->getUserId());
 		if($mtime!== null) {
 			$currentTime->setTimestamp($mtime);
 		}
@@ -213,8 +209,7 @@ class LibraryController extends Controller {
 		$this->api->addStyle('style');
 	
 		$id = $this->params('id');
-		$mapper = new EBookMapper ($this->api);
-		$ebook = $mapper->find($id);
+		$ebook = $this->ebookMapper->find($id);
 		
 		$templateName = 'details';
 		$params = array(
@@ -239,10 +234,8 @@ class LibraryController extends Controller {
 	public function cover(){
 	
 		$id = $this->params('id');
-		$mapper = new EBookMapper ($this->api);
-		$ebook = $mapper->find($id);
-		$this->api->log(print_r($ebook,true));
-		$cover = new Cover($this->api, $ebook);
+		$ebook = $this->ebookMapper->find($id);
+		$cover = new Cover($this->api, $this->libraryStorage, $ebook);
 		return new ImageResponse($cover->getCoverImage());
 	}
 	
@@ -258,9 +251,8 @@ class LibraryController extends Controller {
 	 */
 	public function thumbnail(){
 		$id = $this->params('id');
-		$mapper = new EBookMapper ($this->api);
-		$ebook = $mapper->find($id);
-		$cover = new Cover($this->api, $ebook);
+		$ebook = $this->ebookMapper->find($id);
+		$cover = new Cover($this->api, $this->libraryStorage, $ebook);
 		return new ImageResponse($cover->getThumbnailImage());
 	}
 	

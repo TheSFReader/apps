@@ -45,7 +45,7 @@ class DIContainer extends BaseContainer {
 		 * CONTROLLERS
 		 */
 		$this['LibraryController'] = $this->share(function($c){
-			return new LibraryController($c['API'], $c['Request'], $c['EBookMapper']);
+			return new LibraryController($c['API'], $c['Request'], $c['EBookMapper'], $c['LibraryStorage']);
 		});
 
 		$this['SettingsController'] = $this->share(function($c){
@@ -63,6 +63,10 @@ class DIContainer extends BaseContainer {
 		 */
 		$this['EBookMapper'] = $this->share(function($c){
 			return new EBookMapper($c['API']);
+		});
+		
+		$this['LibraryStorage'] = $this->share(function($c){
+			return \OCP\Files::getStorage('library');
 		});
 
 

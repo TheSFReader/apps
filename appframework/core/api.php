@@ -397,8 +397,15 @@ class API {
 	 * @param int $id
 	 * @return string
 	 */
-	public static function getPath($id) {
+	public function getPath($id) {
 		return \OC\Files\Filesystem::getPath($id);
+	}
+	/*
+	 * create an image
+	* @param $imageref The path to a local file, a base64 encoded string or a resource created by an imagecreate* function.
+	*/
+	public function createImage($imageref) {
+		return new \OC_Image($argument);
 	}
 	
 
