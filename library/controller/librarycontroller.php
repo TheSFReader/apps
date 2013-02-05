@@ -236,7 +236,14 @@ class LibraryController extends Controller {
 		$id = $this->params('id');
 		$ebook = $this->ebookMapper->find($id);
 		$cover = new Cover($this->api, $this->libraryStorage, $ebook);
-		return new ImageResponse($cover->getCoverImage());
+		$coverImage = $cover->getCoverImage();
+		$imageSizes = $ebook->ImageSizes();
+		if(! isset($imageSizes['cover'])) {
+			$imageSizes['cover'] = array('width' => $coverImage->width(), 'height' => $coverImage->height());
+			$ebook->ImageSizes($imageSizes);
+			$this->ebookMapper->update($ebook);
+		}
+		return new ImageResponse($coverImage);
 	}
 	
 	/**
@@ -253,7 +260,16 @@ class LibraryController extends Controller {
 		$id = $this->params('id');
 		$ebook = $this->ebookMapper->find($id);
 		$cover = new Cover($this->api, $this->libraryStorage, $ebook);
-		return new ImageResponse($cover->getThumbnailImage());
+		
+		$thumbnailImage = $cover->getThumbnailImage();
+		$imageSizes = $ebook->ImageSizes();
+		if(! isset($imageSizes['thumbnail'])) {
+			$imageSizes['thumbnail'] = array('width' => $thumbnailImage->width(), 'height' => $thumbnailImage->height());
+			$ebook->ImageSizes($imageSizes);
+			$this->ebookMapper->update($ebook);
+		}
+		
+		return new ImageResponse($thumbnailImage);
 	}
 	
 	/**

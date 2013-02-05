@@ -23,6 +23,7 @@ Class EBook {
 	protected $detailsLink;
 	protected $coverLink;
 	protected $thumbnailLink;
+	protected $imageSizes;
 	
 	function __construct($api, $path) {
 		
@@ -65,6 +66,7 @@ Class EBook {
 		$this->detailsLink =$row['detailsLink'];
 		$this->coverLink =$row['coverLink'];
 		$this->thumbnailLink =$row['thumbnailLink'];
+		$this->imageSizes= json_decode ($row['imagesizes'], true);
 		
 		$downloadURL=$this->api->linkToAbsolute('ajax/download.php','files', array('files' => $this->path));
 		$this->formats = array('epub'=>$downloadURL);
@@ -204,6 +206,13 @@ Class EBook {
 	
 	public function Formats() {
 		return  $this->formats;
+	}
+	
+	public function ImageSizes($sizes = false) {
+		if($sizes!== false) {
+			$this->imageSizes = $sizes;
+		}
+		return $this->imageSizes;
 	}
 	
 	

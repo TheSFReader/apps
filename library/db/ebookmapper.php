@@ -35,7 +35,7 @@ class EBookMapper extends Mapper {
 	/**
 	 * @param API $api: Instance of the API abstraction layer
 	 */
-	public function __construct($api){
+	public function __construct(API $api){
 		parent::__construct($api);
 		$this->tableName = '*PREFIX*library_ebooks';
 	}
@@ -77,7 +77,7 @@ class EBookMapper extends Mapper {
 	 * @throws DoesNotExistException: if the item does not exist
 	 * @return the item
 	 */
-	public function findByPathAndUserId($path,$user){
+	public function findByPathAndUserId($path, $user){
 		$sql = 'SELECT * FROM ' . $this->tableName . ' WHERE filepath = ? and user = ?';
 		$params = array($path, $user);
 	
@@ -162,10 +162,10 @@ class EBookMapper extends Mapper {
 	 * @param Item $item: the item to be saved
 	 * @return the item with the filled in id
 	 */
-	public function save($ebook, $user){
+	public function save(EBook $ebook, $user){
 		$sql = 'INSERT INTO '. $this->tableName . '(user, filepath, authors, title, subjects, mtime, '.
-				'updated, description, isbn, language, publisher, detailslink, coverlink, thumbnaillink)'.
-				' VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+				'updated, description, isbn, language, publisher, detailslink, coverlink, thumbnaillink, imagesizes)'.
+				' VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
 
 		$params = array(
 			$user,
@@ -182,6 +182,7 @@ class EBookMapper extends Mapper {
 			$ebook->DetailsLink(),
 			$ebook->CoverLink(),
 			$ebook->ThumbnailLink(),
+			json_encode($ebook->ImageSizes()),
 		);
 
 		
@@ -195,7 +196,7 @@ class EBookMapper extends Mapper {
 	 * Updates an item
 	 * @param Item $item: the item to be updated
 	 */
-	public function update($ebook){
+	public function update(EBook $ebook){
 		$sql = 'UPDATE '. $this->tableName . ' SET
 			filepath = ?,
 			authors = ?,
@@ -209,7 +210,8 @@ class EBookMapper extends Mapper {
 			publisher = ?,
 			detailslink = ?,
 			coverlink = ?,
-			thumbnaillink = ?
+			thumbnaillink = ?,
+			imagesizes = ?
 			WHERE id = ?';
 
 		$params = array(
@@ -226,6 +228,8 @@ class EBookMapper extends Mapper {
 			$ebook->DetailsLink(),
 			$ebook->CoverLink(),
 			$ebook->ThumbnailLink(),
+			json_encode($ebook->ImageSizes()),
+				
 			$ebook->getId(),
 		);
 
@@ -259,7 +263,7 @@ class EBookMapper extends Mapper {
 	 * @throws DoesNotExistException: if the item does not exist
 	 * @return the item
 	 */
-	public function updateEbookPath($oldpath,$newpath, $user){
+	public function updateEbookPath($oldpath, $newpath, $user){
 		$sql = 'UPDATE '. $this->tableName . ' SET filepath = ? WHERE filepath = ? and user = ?';
 		$params = array($newpath, $oldpath,$user);
 		$this->execute($sql, $params);

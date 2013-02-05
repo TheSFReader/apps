@@ -114,6 +114,11 @@
 				<type>text</type>
 				<length>255</length>
 			</field>
+			<field>
+				<name>imagesizes</name>
+				<type>text</type>
+				<length>255</length>
+			</field>
 		</declaration>
 	</table>
 </database>
