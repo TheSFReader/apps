@@ -1,4 +1,3 @@
-<div id='notification'></div>
 <form class="float" id="file_upload_form" action="<?php echo OCP\Util::linkTo('contacts', 'ajax/uploadphoto.php'); ?>" method="post" enctype="multipart/form-data" target="file_upload_target">
 	<input type="hidden" name="requesttoken" value="<?php echo $_['requesttoken'] ?>">
 	<input type="hidden" name="id" value="<?php echo $_['id'] ?>">
@@ -14,7 +13,7 @@
 	<nav id="grouplist">
 	</nav>
 	<div id="contacts-settings">
-			<h3 class="settings action text" tabindex="0" role="button"><?php echo $l->t('Settings'); ?></h3>
+			<h3 class="settings action text" tabindex="0" role="button" title="<?php echo $l->t('Settings'); ?>"></h3>
 			<h3 data-id="addressbooks" tabindex="0" role="button"><?php echo $l->t('Address books'); ?></h3>
 				<ul class="hidden">
 				</ul>

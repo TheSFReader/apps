@@ -167,6 +167,7 @@
 	width: 16px; height: 16px; 
 	padding: 0; margin: 0; 
 	background-position: center;
+	background-size:contain;
 }
 
 .action.text, .icon.text { 
@@ -331,9 +332,8 @@ ul.propertylist { width: 450px; }
 #contacts-settings .settings { 
 	/*width: 20px; height: 20px; 
 	float: left;*/
-	color: transparent;
 	background-repeat: no-repeat;
-	background-position: left center;
+	background-position:0px 4px;
 	background-origin: content-box;
 	background-image:url('%webroot%/core/img/actions/settings.svg'); 
 }
