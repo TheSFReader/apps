@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<info>
+	<id>library</id>
+	<name>Library</name>
+	<description>library application</description>
+	<version>1.1</version>
+	<licence>AGPL</licence>
+	<author>TheSFReader</author>
+	<require>4</require>
+</info>
