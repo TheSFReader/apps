@@ -79,6 +79,7 @@ class DIContainer extends \Pimple {
 			});
 		});
 
+
 		// enables the linkToRoute function as url() function in twig
 		$this['TwigLinkToRoute'] = $this->share(function($c){
 			$api = $c['API'];
@@ -97,6 +98,14 @@ class DIContainer extends \Pimple {
 		});
 
 
+		// enables the linkToRoute function as url() function in twig
+		$this['TwigImagePath'] = $this->share(function($c){
+			$api = $c['API'];
+			return new \Twig_SimpleFunction('image_path', function () use ($api) {
+				return call_user_func_array(array($api, 'getImagePath'), func_get_args());
+			});
+		});
+			
 		$this['TwigLoader'] = $this->share(function($c){
 			return new \Twig_Loader_Filesystem($c['TwigTemplateDirectory']);
 		});
@@ -113,9 +122,12 @@ class DIContainer extends \Pimple {
 					'autoescape' => true
 				));
 			}
+			$api = $c['API'];
+			$twig->addGlobal('api',$api);
 			$twig->addFunction($c['TwigL10N']);
 			$twig->addFunction($c['TwigLinkToRoute']);
 			$twig->addFunction($c['TwigLinkToAbsoluteRoute']);
+			$twig->addFunction($c['TwigImagePath']);
 			return $twig;
 		});
 

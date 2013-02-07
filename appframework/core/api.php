@@ -179,7 +179,7 @@ class API {
 	 * @param string $tableName the name of the table where we inserted the item
 	 * @return int the id of the inserted element
 	 */
-	public function getInsertId($tableName){
+	public function getInsertId($tableName=null){
 		return \OCP\DB::insertid($tableName);
 	}
 
@@ -193,8 +193,26 @@ class API {
 	public function linkToRoute($routeName, $arguments=array()){
 		return \OC_Helper::linkToRoute($routeName, $arguments);
 	}
-
-
+	
+	/**
+	 * Returns the Absolute URL for a route
+	 * @return the url
+	 */
+	public function linkToRouteAbsolute($routeName, $params = array()){
+		return \OC_Helper::makeURLAbsolute (\OC_Helper::linkToRoute($routeName, $params));
+	}
+	
+	/**
+	 * @brief Makes an $url absolute
+	 * @param string $url the url
+	 * @return string the absolute url
+	 *
+	 * Returns a absolute url to the given url.
+	 */
+	public function makeURLAbsolute($url){
+		return \OC_Helper::makeURLAbsolute ($url);
+	}
+	
 	/**
 	 * Makes an URL absolute
 	 * @param string $url the url
@@ -212,11 +230,11 @@ class API {
 	 * @deprecated replaced with linkToRoute()
 	 * @return string the url
 	 */
-	public function linkToAbsolute($file, $appName=null){
+	public function linkToAbsolute($file, $appName=null, $params = array()){
 		if($appName === null){
 			$appName = $this->appName;
 		}
-		return \OC_Helper::linkToAbsolute($appName, $file);
+		return \OC_Helper::linkToAbsolute($appName, $file, $params);
 	}
 
 
@@ -266,6 +284,34 @@ class API {
 	public function isAppEnabled($appName){
 		\OC_App::isEnabled($appName);
 	}
+	
+
+
+	/**
+	 * Returns a local file path
+	 * @return the path
+	 */
+	public function getLocalFile($path){
+		return \OC\Files\Filesystem::getLocalFile($path);
+	}
+	
+	/**
+	 * get the filesystem info from the cache
+	 * @param string path
+	 * @param string root (optional)
+	 * @return array
+	 *
+	 * returns an associative array with the following keys:
+	 * - size
+	 * - mtime
+	 * - ctime
+	 * - mimetype
+	 * - encrypted
+	 * - versioned
+	 */
+	public function getFilesystemInfo($path){
+		return  \OC\Files\Filesystem::getFileInfo($path);
+	}
 
 
 	/**
@@ -307,7 +353,8 @@ class API {
 	 * @return string the filepath in the filesystem
 	 */
 	public function getLocalFilePath($path){
-		return \OC_Filesystem::getLocalFile($path);
+		$view = new \OC\Files\View('');	
+		return $view->getLocalFile($path);
 	}
 
 
@@ -318,6 +365,48 @@ class API {
 	public function openEventSource(){
 		return new \OC_EventSource();
 	}
-
+	
+	
+	/**
+	 * @brief Creates path to an image
+	 * @param string $app app
+	 * @param string $image image name
+	 * @returns string the url
+	 *
+	 * Returns the path to the image.
+	 */
+	public function getImagePath($appliName, $imagePathInAppli){
+		return \OCP\Util::imagePath($appliName, $imagePathInAppli);
+	}
+	
+	/**
+	 * search for files by mimetype
+	 *
+	 * @param string $mimetype
+	 * @return array
+	 */
+	public function searchByMime($mimetype) {
+		return \OC\Files\Filesystem::searchByMime($mimetype);
+	}
+	
+	/**
+	 * Get the path of a file by id
+	 *
+	 * Note that the resulting path is not guarantied to be unique for the id, multiple paths can point to the same file
+	 *
+	 * @param int $id
+	 * @return string
+	 */
+	public function getPath($id) {
+		return \OC\Files\Filesystem::getPath($id);
+	}
+	/*
+	 * create an image
+	* @param $imageref The path to a local file, a base64 encoded string or a resource created by an imagecreate* function.
+	*/
+	public function createImage($imageref) {
+		return new \OC_Image($imageref);
+	}
+	
 
 }

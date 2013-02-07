@@ -62,7 +62,6 @@ abstract class Controller {
 		$this->urlParams = $urlParams;
 	}
 
-
 	/**
 	 * Lets you access post and get parameters by the index
 	 * @param string $key the key which you want to access in the URL Parameter
@@ -75,17 +74,17 @@ abstract class Controller {
 	 * @return mixed the content of the array
 	 */
 	public function params($key, $default=null){
-		$postValue = $this->request->getPOST($key);
-		$getValue = $this->request->getGET($key);
-
+		
 		if(array_key_exists($key, $this->urlParams)){
 			return $this->urlParams[$key];
 		}
 
+		$postValue = $this->request->getPOST($key);
 		if($postValue !== null){
 			return $postValue;
 		}
-
+		
+		$getValue = $this->request->getGET($key);
 		if($getValue !== null){
 			return $getValue;
 		}
