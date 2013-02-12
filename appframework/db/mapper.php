@@ -55,6 +55,7 @@ abstract class Mapper {
 
 		$result = $this->execute($sql, $params);
 		$row = $result->fetchRow();
+
 		if($row === null){
 			throw new DoesNotExistException('Item with id ' . $id . ' does not exist!');
 		} else {

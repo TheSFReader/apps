@@ -1,0 +1,107 @@
+.starred-icon {
+	background-image: url('%appswebroot%/news/img/starred.png');
+}
+
+.subscriptions-icon {
+	background-image: url('%appswebroot%/news/img/rss.svg');
+}
+
+.unread {
+	font-weight: bold;
+}
+
+#left-content .unread > a {
+	padding-right: 32px;
+}
+
+#left-content .utils {
+	position: absolute;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+
+#left-content .utils > * {
+	float: right;
+}
+
+#left-content .utils button {
+	margin: 0;
+	background-position: center;
+	background-repeat: no-repeat;
+	background-color: transparent;
+	border: 0;
+	box-shadow: none;
+	display: none;
+	height: 32px;
+	width: 32px;
+}
+
+#left-content li:hover .utils button {
+	display: block;
+}
+
+.folder {
+	text-transform: uppercase;
+}
+
+.unread-counter {
+	padding: 8px 6px 8px 5px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	text-align: center;
+	font-size: 9pt;
+	display: none;
+}
+
+
+.unread .unread-counter {
+	display: block;
+}
+
+
+button.action {
+	opacity: .5;
+}
+
+button.action:hover {
+	opacity: 1;
+}
+
+
+#left-content li:hover > a {
+	padding-right: 98px;
+}
+
+#left-content li:hover > .utils {
+	display: block;
+}
+
+#left-content li:hover > .utils .unread-counter {
+	padding-right: 0;
+}
+
+.delete-icon {
+	background-position: center 9px !important;
+	background-image: url('%webroot%/core/img/actions/delete.svg');
+}
+
+.delete-icon:hover {
+	background-image: url('%webroot%/core/img/actions/delete-hover.svg');
+}
+
+.edit-icon {
+	background-image: url('%webroot%/core/img/actions/rename.svg');
+}
+
+.mark-read-icon {
+	background-image: url('%appswebroot%/news/img/mark_read.svg');
+}
+
+.rss-icon {
+	background-image: url('%appswebroot%/news/img/rss.svg');
+}
+
+#left-content .ui-draggable-dragging {
+	width: 249px;
+}

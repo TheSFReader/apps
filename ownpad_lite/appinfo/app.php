@@ -38,7 +38,11 @@ class App {
 	}
 
 	static public function getUsername() {
-		return self::getValue(self::CONFIG_USERNAME, \OCP\User::getUser());
+		$username =  self::getValue(self::CONFIG_USERNAME, \OCP\User::getDisplayName());
+		if (!$username){
+			$username = \OCP\User::getUser();
+		}
+		return $username;
 	}
 
 	static public function setUsername($username) {
@@ -50,6 +54,35 @@ class App {
 	}
 }
 
+class UrlParam{
+	const CONFIG_URL = 'url';
+	const CONFIG_USERNAME = 'username';
+	const SHARE_SEARCH = 'search';
+	static public function getParam($key){
+		$param = self::post($key);
+		if (!$param){
+			$param = self::get($key);
+		}
+		return $param;
+	}
+	
+	static public function get($key){
+		return self::getKey($_POST, $key);
+	}
+	
+	static public function post($key){
+	
+		return self::getKey($_POST, $key);
+	}
+	
+	static protected function getKey($array, $key){
+		if (isset($array[$key])){
+			return $array[$key];
+		}
+		return false;
+	}
+}
+
 \OCP\App::addNavigationEntry( array(
 	'id' => 'ownpad_lite_index',
 	'order' => 90,
@@ -57,3 +90,5 @@ class App {
 	'icon' => \OCP\Util::imagePath( 'settings', 'users.svg' ),
 	'name' => \OC_L10N::get(App::APP_ID)->t('My pad') )
 );
+
+\OC::$CLASSPATH['OCA\ownpad_lite\Contacts'] = App::APP_ID.'/lib/contacts.php';
