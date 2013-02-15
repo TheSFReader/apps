@@ -117,7 +117,7 @@ class LibraryController extends Controller {
 		$params = array(
 			'thisLink' => $this->api->linkToRoute($routeName, $paramsIn),
 			'ebooks' => $ebooks,
-			'userName' => $this->api->getUserId(),
+			'userName' => $this->api->getDisplayName(),
 		);
 		return $this->render($templateName, $params);
 	}
@@ -148,8 +148,8 @@ class LibraryController extends Controller {
 		$params = array(
 			'thisLink' => $this->api->linkToRouteAbsolute($routeName, $paramsIn),
 			'updateDate' => $currentTime->format(\DateTime::ATOM),		
-			'userName' => $this->api->getUserId(),
-			'userMail' => 'TheSFReader@gmail.com',
+			'userName' => $this->api->getDisplayName(),
+			//'userMail' => 'TheSFReader@gmail.com',
 		);
 		$headers = array();
 		$headers[]= 'Content-Type: '. OPDS_MIME_CATALOG;
@@ -186,8 +186,8 @@ class LibraryController extends Controller {
 				'thisLink' => $this->api->linkToRouteAbsolute($routeName, $paramsIn),
 				'ebooks' => $ebooks,
 				'updateDate' => $currentTime->format(\DateTime::ATOM),
-				'userName' => $this->api->getUserId(),
-				'userMail' => 'TheSFReader@gmail.com',
+				'userName' => $this->api->getDisplayName(),
+				//'userMail' => 'TheSFReader@gmail.com',
 		);
 		$headers = array();
 		$headers[]= 'Content-Type: '. OPDS_MIME_CATALOG;
@@ -205,11 +205,60 @@ class LibraryController extends Controller {
 	 */
 	public function details(){
 	
+		$id = $this->params('id');
+		$ebook = $this->ebookMapper->find($id);
+		
+		$params =  $this->getParams();
+		
+		//$this->api->log(print_r($params,true));
+		if(isset($params['update'])) {
+			if(isset($params['title'])) {
+				$ebook->Title($params['title']);
+			}
+			if(isset($params['publisher'])) {
+				$ebook->Publisher($params['publisher']);
+			}
+			if(isset($params['description'])) {
+				$ebook->Description($params['description']);
+			}
+			if(isset($params['language'])) {
+				$ebook->Language($params['language']);
+			}
+			if(isset($params['isbn'])) {
+				$ebook->ISBN($params['isbn']);
+			}
+			if(isset( $params['authorname'])) {
+				$authornames = $params['authorname'];
+				foreach ($authornames as $num => $authorname) {
+					if($authorname){
+						$as = $params['authoras'][$num];
+						if(!$as) $as = $authorname;
+						$authors[$as] = $authorname;
+					}
+				}
+				$ebook->Authors($authors);
+			}
+			if(isset( $params['subjects'])) {
+				$subjects = $params['subjects'];
+				if(is_string($subjects)){
+					if($subjects === ''){
+						$subjects = array();
+					}else{
+						$subjects = explode(',',$subjects);
+						$subjects = array_map('trim',$subjects);
+					}
+				}
+				$ebook->Subjects($subjects);
+			}
+			
+			$this->ebookMapper->update($ebook);
+			$url = $this->api->linkToRoute('library_details', array('id' => $ebook->getId()));
+			return new RedirectResponse($url);
+		}
 		// your own stuff
 		$this->api->addStyle('style');
 	
-		$id = $this->params('id');
-		$ebook = $this->ebookMapper->find($id);
+		
 		
 		$templateName = 'details';
 		$params = array(

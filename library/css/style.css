@@ -63,3 +63,6 @@ table th#headerName { width:100em;} // not really sure why this works better tha
 table th#headerSize, table td.filesize { min-width:3em; padding:0 1em; text-align:right; }
 table th#headerDate, table td.date { min-width:11em; padding:0 .1em 0 1em; text-align:left; }
 
+textarea { width:auto; }
+text#subjects {width:50em; }
+
