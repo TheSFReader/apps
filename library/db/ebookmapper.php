@@ -31,13 +31,17 @@ class EBookMapper extends Mapper {
 
 
 	private $tableName;
+	private $authorsLinkTableName;
+	private $authorMapper;
 
 	/**
 	 * @param API $api: Instance of the API abstraction layer
 	 */
-	public function __construct(API $api){
+	public function __construct(API $api, AuthorMapper $authorMapper){
 		parent::__construct($api);
 		$this->tableName = '*PREFIX*library_ebooks';
+		$this->authorsLinkTableName = '*PREFIX*library_ebook_author';
+		$this->authorMapper = $authorMapper;
 	}
 
 
@@ -189,6 +193,12 @@ class EBookMapper extends Mapper {
 		$this->execute($sql, $params);
 
 		$ebook->setId($this->api->getInsertId($this->tableName));
+
+		foreach ($ebook->Authors() as $as => $authorname) {
+			$author = new Author($this->api, $authorname, $as);
+			$this->authorMapper->addEBookLink($ebook, $author, $user);
+				
+		}
 	}
 
 
@@ -196,7 +206,7 @@ class EBookMapper extends Mapper {
 	 * Updates an item
 	 * @param Item $item: the item to be updated
 	 */
-	public function update(EBook $ebook){
+	public function update(EBook $ebook, $user){
 		$sql = 'UPDATE '. $this->tableName . ' SET
 			filepath = ?,
 			authors = ?,
@@ -234,6 +244,17 @@ class EBookMapper extends Mapper {
 		);
 
 		$this->execute($sql, $params);
+		
+		$sql = 'DELETE FROM `' . $this->authorsLinkTableName . '` WHERE `ebookid` = ?';
+		$params = array($ebook->getId());
+		$this->execute($sql, $params);
+		
+		foreach ($ebook->Authors() as $as => $authorname) {
+			$author = new Author($this->api, $authorname, $as);
+			$this->authorMapper->addEBookLink($ebook, $author, $user);
+		
+		}
+		
 	}
 
 

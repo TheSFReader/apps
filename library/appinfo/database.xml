@@ -34,7 +34,7 @@
 			</field>
 		</declaration>
 	</table>
-		<table>
+	<table>
 		<name>*dbprefix*library_ebooks</name>
 		<declaration>
 			<field>				
@@ -50,6 +50,11 @@
 				<type>text</type>
 				<notnull>true</notnull>
 				<length>64</length>
+			</field>
+			
+			<field>
+				<name>visibility</name>
+				<type>integer</type>
 			</field>
 			<field>
 				<name>authors</name>
@@ -119,6 +124,131 @@
 				<type>text</type>
 				<length>255</length>
 			</field>
+		</declaration>
+	</table>
+	<table>
+		<name>*dbprefix*library_authors</name>
+		<declaration>
+			<field>				
+				<name>id</name>
+				<type>integer</type>
+				<default>0</default>
+				<notnull>true</notnull>
+					<autoincrement>1</autoincrement>
+				<length>4</length>
+			</field>
+			<field>
+				<name>user</name>
+				<type>text</type>
+				<notnull>true</notnull>
+				<length>64</length>
+			</field>
+			<field>
+				<name>name</name>
+				<type>text</type>
+				<notnull>true</notnull>
+				<length>64</length>
+			</field>
+			<field>
+				<name>nameas</name>
+				<type>text</type>
+				<notnull>true</notnull>
+				<length>64</length>
+			</field>
+		</declaration>
+	</table>
+	<table>
+		<name>*dbprefix*library_ebook_author</name>
+		<declaration>
+			<field>				
+				<name>ebookid</name>
+				<type>integer</type>
+				<notnull>true</notnull>
+			</field><field>				
+				<name>authorid</name>
+				<type>integer</type>
+				<notnull>true</notnull>
+			</field>		
+		</declaration>
+	</table>
+	<table>
+		<name>*dbprefix*library_tags</name>
+		<declaration>
+			<field>				
+				<name>id</name>
+				<type>integer</type>
+				<default>0</default>
+				<notnull>true</notnull>
+					<autoincrement>1</autoincrement>
+				<length>4</length>
+			</field>
+			<field>
+				<name>user</name>
+				<type>text</type>
+				<notnull>true</notnull>
+				<length>64</length>
+			</field>
+			<field>
+				<name>name</name>
+				<type>text</type>
+				<notnull>true</notnull>
+				<length>64</length>
+			</field>
+		</declaration>
+	</table>
+	<table>
+		<name>*dbprefix*library_ebook_tag</name>
+		<declaration>
+			<field>				
+				<name>ebookid</name>
+				<type>integer</type>
+				<notnull>true</notnull>
+			</field>
+			<field>				
+				<name>tagid</name>
+				<type>integer</type>
+				<notnull>true</notnull>
+			</field>		
+		</declaration>
+	</table>
+	<table>
+		<name>*dbprefix*library_collections</name>
+		<declaration>
+			<field>				
+				<name>id</name>
+				<type>integer</type>
+				<default>0</default>
+				<notnull>true</notnull>
+					<autoincrement>1</autoincrement>
+				<length>4</length>
+			</field>
+			<field>
+				<name>user</name>
+				<type>text</type>
+				<notnull>true</notnull>
+				<length>64</length>
+			</field>
+			<field>
+				<name>name</name>
+				<type>text</type>
+				<notnull>true</notnull>
+				<length>64</length>
+			</field>
+		</declaration>
+	</table>
+	<table>
+		<name>*dbprefix*library_ebook_collection</name>
+		<declaration>
+			<field>				
+				<name>ebookid</name>
+				<type>integer</type>
+				<notnull>true</notnull>
+			</field>
+			<field>				
+				<name>collectionid</name>
+				<type>integer</type>
+				<notnull>true</notnull>
+			</field>		
 		</declaration>
 	</table>
 </database>

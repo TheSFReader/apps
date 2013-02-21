@@ -179,4 +179,21 @@ class API extends ParentAPI {
 	}
 	
 	
+	
+	/**
+	 * Start a transaction
+	 * @return bool
+	 */
+	public static function beginTransaction() {
+		return \OC_DB::beginTransaction();
+	}
+	
+	/**
+	 * Commit the database changes done during a transaction that is in progress
+	 * @return bool
+	 */
+	public static function commit() {
+		return \OC_DB::commit();
+	}
+	
 }

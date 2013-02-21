@@ -32,6 +32,10 @@ use \OCA\Library\Lib\ImageResponse;
 use OCA\Library\Db\EBookMapper;
 use OCA\Library\Db\EBook;
 
+
+use OCA\Library\Db\AuthorMapper;
+use OCA\Library\Db\Author;
+
 use OCA\Library\Db\Item;
 use OCA\Library\Lib\Cover;
 use OCA\Library\Lib\HookHandler;
@@ -54,14 +58,17 @@ const OPENSEARCH_MIME = 'application/opensearchdescription+xml';
 class LibraryController extends Controller {
 	
 	protected $libraryStorage;
+	protected $authorMapper;
+	protected $ebookMapper;
 	/**
 	 * @param Request $request: an instance of the request
 	 * @param API $api: an api wrapper instance
 	 * @param ItemMapper $itemMapper: an itemwrapper instance
 	 */
-	public function __construct($api, $request, $ebookMapper, $libraryStorage){
+	public function __construct($api, $request, $ebookMapper, $authorMapper, $libraryStorage){
 		parent::__construct($api, $request);
 		$this->ebookMapper = $ebookMapper;
+		$this->authorMapper = $authorMapper;
 		$this->libraryStorage = $libraryStorage;
 	}
 
@@ -251,7 +258,7 @@ class LibraryController extends Controller {
 				$ebook->Subjects($subjects);
 			}
 			
-			$this->ebookMapper->update($ebook);
+			$this->ebookMapper->update($ebook, $this->api->getUserId());
 			$url = $this->api->linkToRoute('library_details', array('id' => $ebook->getId()));
 			return new RedirectResponse($url);
 		}
@@ -290,7 +297,7 @@ class LibraryController extends Controller {
 		if(! isset($imageSizes['cover'])) {
 			$imageSizes['cover'] = array('width' => $coverImage->width(), 'height' => $coverImage->height());
 			$ebook->ImageSizes($imageSizes);
-			$this->ebookMapper->update($ebook);
+			$this->ebookMapper->update($ebook, $this->api->getUserId());
 		}
 		return new ImageResponse($coverImage);
 	}
@@ -315,7 +322,7 @@ class LibraryController extends Controller {
 		if(! isset($imageSizes['thumbnail'])) {
 			$imageSizes['thumbnail'] = array('width' => $thumbnailImage->width(), 'height' => $thumbnailImage->height());
 			$ebook->ImageSizes($imageSizes);
-			$this->ebookMapper->update($ebook);
+			$this->ebookMapper->update($ebook, $this->api->getUserId());
 		}
 		
 		return new ImageResponse($thumbnailImage);

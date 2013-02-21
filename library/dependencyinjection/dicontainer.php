@@ -29,6 +29,7 @@ use OCA\Library\Controller\LibraryController;
 use OCA\Library\Controller\SettingsController as SettingsController;
 use OCA\Library\Db\ItemMapper as ItemMapper;
 use OCA\Library\Db\EBookMapper;
+use OCA\Library\Db\AuthorMapper;
 
 use OCA\Library\Core\API;
 
@@ -86,7 +87,7 @@ class DIContainer extends BaseContainer {
 		 * CONTROLLERS
 		 */
 		$this['LibraryController'] = $this->share(function($c){
-			return new LibraryController($c['API'], $c['Request'], $c['EBookMapper'], $c['LibraryStorage']);
+			return new LibraryController($c['API'], $c['Request'], $c['EBookMapper'], $c['AuthorMapper'], $c['LibraryStorage']);
 		});
 
 		$this['SettingsController'] = $this->share(function($c){
@@ -103,7 +104,11 @@ class DIContainer extends BaseContainer {
 		 * MAPPERS
 		 */
 		$this['EBookMapper'] = $this->share(function($c){
-			return new EBookMapper($c['API']);
+			return new EBookMapper($c['API'], $c['AuthorMapper']);
+		});
+		
+		$this['AuthorMapper'] = $this->share(function($c){
+			return new AuthorMapper($c['API']);
 		});
 		
 		$this['LibraryStorage'] = $this->share(function($c){
