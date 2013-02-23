@@ -1,11 +1,10 @@
 <div id="app">
-  <h1 class="heading">{{ trans("%s's Library",userName) }}</h1>
+  <h1 class="heading">{{ author.Name }} ({{author.NameAs}})</h1>
 
  <table>
- <tr><td><a href="{{ thisLink }}">This</a></td>
-<td><a href="{{ url('library_opds') }}">OPDS</a></td>
+ <tr><td><a href="{{ thisLink }}">{{ trans("This") }}</a></td>
+<td><a href="{{ url('library_index') }}">{{ trans("Library") }}</a></td>
 <td><a href="{{ url('library_authors') }}">{{ trans("Authors") }}</a></td>
-<td><a href="{{ url('library_index_rescan') }}">{{ trans("Re-Scan") }}</a></td>
 </tr></table>
 {% if ebooks |length > 0 %}
     <table>
@@ -20,7 +19,7 @@
 	<tbody id="fileList">
 	{% for ebook in ebooks %}
 		<tr>
-		<td><a href="{{ url('library_details', {'id': ebook.getId}) }}">{{ ebook.Title|e }}</a></td>
+		<td><a href="{{ ebook.DetailsLink}}">{{ ebook.Title|e }}</a></td>
 		<td>{% if ebook.Authors|length > 0 %}{{ ebook.Authors|join(', ') }}{% endif %}</td>
 		<td>{{ ebook.Updated }}</td>
 		<td>{{ ebook.Publisher }}</td>

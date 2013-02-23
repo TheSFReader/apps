@@ -133,6 +133,7 @@ class EBookMapper extends Mapper {
 			}	
 		}
 
+		
 		$sql = 'SELECT * FROM ' . $this->tableName . ' WHERE user = ? ORDER BY '.$paramName ;
 		if($descending)
 			$sql .= ' DESC';
@@ -147,6 +148,48 @@ class EBookMapper extends Mapper {
 		return $entityList;
 	}
 	
+	/**
+	 * Finds all Items for a given user
+	 * @param $user the userId
+	 * @param $sortby (or null) the sorting criteria to be used ammongst:
+	 * title, newest, authors,publlisher
+	 * @return array containing all items
+	 */
+	public function findAllForUserAuthor($user, $author, $sortby = null){
+		
+		
+		$descending = false;
+		$paramName = 'title';
+			
+		if(isset($sortby)) {
+			if($sortby =='newest') {
+				$paramName = 'mtime';
+				$descending = true;
+			} elseif ($sortby =='authors') {
+				$paramName = 'authors';
+			} elseif ($sortby =='publisher') {
+				$paramName = 'publisher';
+			} elseif ($sortby =='title') {
+				$paramName = 'title';
+			}
+		}
+	
+	
+		$tableName = $this->tableName;
+		$authorsLinkTableName = $this->authorsLinkTableName;
+		$sql = "SELECT * FROM '$tableName','$authorsLinkTableName' WHERE user = ? AND authorid = ? AND $tableName.id = $authorsLinkTableName.ebookid ORDER BY $paramName";
+		if($descending)
+			$sql .= ' DESC';
+		$params = array($user, $author);
+		$result= $this->execute($sql,$params);
+	
+		$entityList = array();
+		while($row = $result->fetchRow()){
+			$entity = new EBook($this->api,$row);
+			array_push($entityList, $entity);
+		}
+		return $entityList;
+	}
 	
 	/**
 	 * Findsthe latest
@@ -197,7 +240,6 @@ class EBookMapper extends Mapper {
 		foreach ($ebook->Authors() as $as => $authorname) {
 			$author = new Author($this->api, $authorname, $as);
 			$this->authorMapper->addEBookLink($ebook, $author, $user);
-				
 		}
 	}
 
@@ -245,6 +287,7 @@ class EBookMapper extends Mapper {
 
 		$this->execute($sql, $params);
 		
+		// Keep the authors in the ebook's table for cache.
 		$sql = 'DELETE FROM `' . $this->authorsLinkTableName . '` WHERE `ebookid` = ?';
 		$params = array($ebook->getId());
 		$this->execute($sql, $params);

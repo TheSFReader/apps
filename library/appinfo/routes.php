@@ -75,6 +75,19 @@ $this->create('library_opds_new', '/opds/new')->action(
 		}
 );
 
+$this->create('library_authors', '/authors')->action(
+		function($params){
+			App::main('LibraryController', 'authors', $params, new DIContainer());
+		}
+);
+
+
+$this->create('library_author', '/author/{author}')->action(
+		function($params){
+			App::main('LibraryController', 'author', $params, new DIContainer());
+		}
+);
+
 $this->create('library_index_sort', '/sortby/{sortby}')->action(
 		function($params){
 			

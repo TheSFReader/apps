@@ -89,6 +89,8 @@ class DIContainer extends BaseContainer {
 		$this['LibraryController'] = $this->share(function($c){
 			return new LibraryController($c['API'], $c['Request'], $c['EBookMapper'], $c['AuthorMapper'], $c['LibraryStorage']);
 		});
+		
+		
 
 		$this['SettingsController'] = $this->share(function($c){
 			return new SettingsController($c['API'], $c['Request']);

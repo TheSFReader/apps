@@ -29,9 +29,9 @@
 		
 		{% if ebook.Description %}<summary>{{ ebook.Description }}</summary>{% endif %}
 		
-		{% if ebook.CoverLink %}<link type="image/png" rel="http://opds-spec.org/image" href="{{ ebook.CoverLink }}"/>{% endif %}
+		{% if ebook.CoverLink %}<link type="image/png" rel="http://opds-spec.org/image" href="{{ abs_url('library_cover', {'id': ebook.getId}) }}"/>{% endif %}
 		
-		{% if ebook.ThumbnailLink %}<link type="image/png" rel="http://opds-spec.org/image/thumbnail" href="{{ ebook.ThumbnailLink }}"/>{% endif %}
+		{% if ebook.ThumbnailLink %}<link type="image/png" rel="http://opds-spec.org/image/thumbnail" href="{{ abs_url('library_thumbnail', {'id': ebook.getId}) }}"/>{% endif %}
 		
 		{% if ebook.DetailsLink %}<link type="text/html" title="Details" rel="alternate" href="{{ ebook.DetailsLink }}"/>{% endif %}
 		

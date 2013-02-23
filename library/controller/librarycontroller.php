@@ -137,6 +137,69 @@ class LibraryController extends Controller {
 	 * @brief renders the index page
 	 * @return an instance of a Response implementation
 	 */
+	public function authors(){
+		// your own stuff
+		$this->api->addStyle('style');
+	
+		$authors= $this->authorMapper->findAllForUser($this->api->getUserId());
+		
+		$templateName = 'authors';
+		$paramsIn =  $this->getParams();
+		$routeName = $paramsIn['_route'];
+		// unset the _route param so that it is not re-sent
+		unset($paramsIn['_route']);
+	
+		$params = array(
+				'thisLink' => $this->api->linkToRoute($routeName, $paramsIn),
+				'authors' => $authors,
+				'userName' => $this->api->getDisplayName(),
+		);
+		return $this->render($templateName, $params);
+	}
+	
+	/**
+	 * @CSRFExemption
+	 * @IsAdminExemption
+	 * @IsSubAdminExemption
+	 *
+	 * @brief renders the index page
+	 * @return an instance of a Response implementation
+	 */
+	public function author(){
+		$this->api->log("Author",4);
+		// your own stuff
+		$this->api->addStyle('style');
+	
+		$authorId = $this->params('author');
+		
+		$author = $this->authorMapper->find($authorId);
+		$ebooks = $this->ebookMapper->findAllForUserAuthor($this->api->getUserId(),$authorId);
+	
+		//$sortby = $this->params('sortby');
+		//$ebooks = $this->ebookMapper->findAllForUser($this->api->getUserId(),$sortby);
+	
+		$templateName = 'author';
+		$paramsIn =  $this->getParams();
+		$routeName = $paramsIn['_route'];
+		// unset the _route param so that it is not re-sent
+		unset($paramsIn['_route']);
+	
+		$params = array(
+				'author' => $author,
+				'thisLink' => $this->api->linkToRoute($routeName, $paramsIn),
+				'ebooks' => $ebooks,
+				'userName' => $this->api->getDisplayName(),
+		);
+		return $this->render($templateName, $params);
+	}
+	/**
+	 * @CSRFExemption
+	 * @IsAdminExemption
+	 * @IsSubAdminExemption
+	 *
+	 * @brief renders the index page
+	 * @return an instance of a Response implementation
+	 */
 	public function opds(){
 		$paramsIn =  $this->getParams();
 		$routeName = $paramsIn['_route'];

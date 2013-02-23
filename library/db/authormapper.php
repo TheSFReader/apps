@@ -62,9 +62,11 @@ class AuthorMapper extends Mapper {
 	 * @return the item
 	 */
 	public function findByUserId($userId){
+		
 		$sql = 'SELECT * FROM ' . $this->tableName . ' WHERE user = ?';
 		$params = array($userId);
 
+		$this->api->log(var_export($sql,true),4);
 		$result = $this->execute($sql, $params)->fetchRow();
 		if($result){
 			return new Author($this->api, $result);
@@ -150,7 +152,7 @@ class AuthorMapper extends Mapper {
 			}	
 		}
 
-		$sql = 'SELECT * FROM ' . $this->tableName . ' WHERE user = ? ORDER BY as' ;
+		$sql = 'SELECT * FROM ' . $this->tableName . ' WHERE user = ? ORDER BY nameas' ;
 		$params = array($user);
 		$result= $this->execute($sql,$params);
 		
