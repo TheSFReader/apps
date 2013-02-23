@@ -2,8 +2,9 @@
 	<h1 class="heading">Details</h1>
 	<a href="{{ url('library_index') }}">Library</a><BR/>
 	<a href="{{ url('library_details', {'id': ebook.getId}) }}">{{ ebook.Title }}</a><BR/>
+	<a href="{{ url('library_details', {'id': ebook.getId, 'edition':'true'}) }}">Edition</a><BR/>
 	<a href="{{ ebook.formats.epub }}">Download</a><BR/>
-	
+	{% if edition %}
 	<form action="" method="get" id="bookpanel" enctype="multipart/form-data">
         <input type="hidden" name="id" value="{{ebook.Id }}" />
 
@@ -15,7 +16,7 @@
             <tr>
                 <th>Authors</th>
                 <td id="authors">
-                {% set count = 0%}{%  for as, author in ebook.Authors %}
+                {% set count = 0 %}{%  for as, author in ebook.Authors %}
                             <p>
                                 <input type="text" name="authorname[{{ count }}]" value="{{ author }}" />
                                 (<input type="text" name="authoras[{{ count }}]" value="{{ as }}" />)
@@ -27,7 +28,7 @@
                 <th>Description<br />
                     <a href="{{ url('library_cover', {'id': ebook.getId}) }}"><img src="{{ url('library_thumbnail', {'id': ebook.getId}) }}" {% if ebook.ImageSizes.thumbnail.width %}width="{{ ebook.ImageSizes.thumbnail.width }}" {% endif %}  {% if ebook.ImageSizes.thumbnail.height %}height="{{ ebook.ImageSizes.thumbnail.height }}" {% endif %}/></a>
                 </th>
-                <td width="80%"><textarea name="description" rows="10" cols="100">{{ ebook.Description }}</textarea></td>
+                <td width="80%" id="description"><textarea name="description" rows="10" cols="100">{{ ebook.Description }}</textarea></td>
             </tr>
             <tr>
                 <th>Subjects</th>
@@ -51,9 +52,51 @@
                     <input type="file" name="coverfile" />
                     URL: <input type="text" name="coverurl" value="" />
                 </p></td>
+            </tr>
         </table>
         <div class="center">
             <input name="update" type="submit" />
         </div>
     </form>
+    {% else %}
+    <table>
+            <tr>
+                <th>Title</th>
+                <td>{{ ebook.Title }}</td>
+            </tr>
+            <tr>
+                <th>Authors</th>
+                <td id="authors">
+                {% set count = 0%}{%  for as, author in ebook.Authors %}
+                            <p>
+                                {{ author }}({{ as }})
+                            </p>
+                    {% set count = count + 1  %} {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th>Description<br />
+                    <a href="{{ url('library_cover', {'id': ebook.getId}) }}"><img src="{{ url('library_thumbnail', {'id': ebook.getId}) }}" {% if ebook.ImageSizes.thumbnail.width %}width="{{ ebook.ImageSizes.thumbnail.width }}" {% endif %}  {% if ebook.ImageSizes.thumbnail.height %}height="{{ ebook.ImageSizes.thumbnail.height }}" {% endif %}/></a>
+                </th>
+                <td id="description">{{ ebook.Description }}</td>
+            </tr>
+            <tr>
+                <th>Subjects</th>
+                <td>{{ ebook.Subjects|join(', ') }}</td>
+            </tr>
+            <tr>
+                <th>Publisher</th>
+                <td>{{ ebook.Publisher }}</td>
+            </tr>
+            <tr>
+                <th>Language</th>
+                <td>{{ ebook.Language }}</td>
+            </tr>
+            <tr>
+                <th>ISBN</th>
+                <td>{{ ebook.Isbn }}</td>
+            </tr>
+           
+        </table>
+    {% endif %}
 </div>

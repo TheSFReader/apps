@@ -280,6 +280,7 @@ class LibraryController extends Controller {
 		
 		$params =  $this->getParams();
 		
+		
 		//$this->api->log(print_r($params,true));
 		if(isset($params['update'])) {
 			if(isset($params['title'])) {
@@ -331,9 +332,12 @@ class LibraryController extends Controller {
 		
 		
 		$templateName = 'details';
+
+		$edition = isset($params['edition']);
 		$params = array(
 				'ebook' => $ebook,
 				'indexLink' => $this->api->linkToRoute('library_index'),
+				'edition' => $edition,
 		);
 		return $this->render($templateName, $params);
 		

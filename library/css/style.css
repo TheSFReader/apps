@@ -62,6 +62,7 @@ table td { border-bottom:1px solid #eee; font-style:normal; background-position:
 table th#headerName { width:100em;} // not really sure why this works better than 100% … table styling  }
 table th#headerSize, table td.filesize { min-width:3em; padding:0 1em; text-align:right; }
 table th#headerDate, table td.date { min-width:11em; padding:0 .1em 0 1em; text-align:left; }
+table td#description { white-space:normal; }
 
 textarea { width:auto; }
 text#subjects {width:50em; }
