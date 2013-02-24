@@ -11,14 +11,16 @@ class HookHandler {
 	
 	protected $api;
 	protected $ebookMapper;
+	protected $authorMapper;
 	/**
 	 * @param Request $request: an instance of the request
 	 * @param API $api: an api wrapper instance
 	 * @param EBookMapper $ebookMapper: an ebookMapper instance
 	 */
-	public function __construct($api, $ebookMapper){
+	public function __construct($api, $ebookMapper,$authorMapper){
 		$this->api=$api;
 		$this->ebookMapper = $ebookMapper;
+		$this->authorMapper = $authorMapper;
 	}
 	
 	public static function writeFile($params) {
@@ -31,32 +33,29 @@ class HookHandler {
 			
 			$ebook = new EBook($api,  $path);
 			$userId = $api->getUserId();
-			$ebookMapper = $diContainer['EBookMapper'];
-			$ebookMapper->save($ebook,$userId);
+			$mapper = $diContainer['EBookMapper'];
+			$mapper->save($ebook,$userId);
 			// We update so that it stores the updated links
-			$ebookMapper->update($ebook,$userId);
+			$mapper->update($ebook,$userId);
 		}
 	}
 	
 	public static function removeFile($params) {
-		
 		
 		$path = $params[\OC\Files\Filesystem::signal_param_path];
 		try { 
 			$diContainer = new DIContainer();
 			$api = $diContainer['API'];
 
-			
-			$mapper = new EBookMapper ($api);
 			$userId = $api->getUserId();
+
+			$mapper = $diContainer['EBookMapper'];
 			$ebook = $mapper->findByPathAndUserId($path,$userId);
-			
-			$cover= new Cover($api,$ebook);
+
+			$cover= new Cover($api,$diContainer['LibraryStorage'], $ebook);
 			$cover->clearImages();
 			
-			$userId = $api->getUserId();
-			$ebookMapper = $diContainer['EBookMapper'];
-			$ebookMapper->deleteByPath($path,$userId);
+			$mapper->delete($ebook->getId());
 		} catch(DoesNotExistException $ex) {
 			\OC_Log::write("HookHandler", "Caught! " . var_export($params, true),4);
 		}
@@ -74,10 +73,11 @@ class HookHandler {
 		$api = $diContainer['API'];
 		
 		$userId = $api->getUserId();
-		$mapper = new EBookMapper ($api);
+		$mapper = $diContainer['EBookMapper'];
 		
 		$ebook = $mapper->findByPathAndUserId($oldpath,$userId);
-		Cover::clear($api,$ebook);
+		$cover= new Cover($api,$diContainer['LibraryStorage'], $ebook);
+		$cover->clearImages();
 		$mapper->updateEbookPath($oldpath, $newpath, $userId);
 	}
 	
@@ -86,14 +86,15 @@ class HookHandler {
 		$diContainer = new DIContainer();
 		$api = $diContainer['API'];
 		$userId = $api->getUserId();
-		$ebookMapper = $diContainer['EBookMapper'];
-		$results = $ebookMapper->findAllForUser($uid);
+		$mapper = $diContainer['EBookMapper'];
+		$results = $mapper->findAllForUser($uid);
 		
 		foreach($results as $ebook) {
-			$ebook = $ebookMapper->findByPathAndUserId($oldpath,$userId);
-			Cover::clear($api,$ebook);
+			$ebook = $mapper->findByPathAndUserId($oldpath,$userId);
+			$cover= new Cover($api,$diContainer['LibraryStorage'], $ebook);
+			$cover->clearImages();
 			
-			$ebookMapper->delete($ebook->getId());
+			$mapper->delete($ebook->getId());
 		}
 	}
 	

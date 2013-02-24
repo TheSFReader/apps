@@ -105,13 +105,16 @@ class DIContainer extends BaseContainer {
 		/**
 		 * MAPPERS
 		 */
-		$this['EBookMapper'] = $this->share(function($c){
-			return new EBookMapper($c['API'], $c['AuthorMapper']);
-		});
-		
+
 		$this['AuthorMapper'] = $this->share(function($c){
 			return new AuthorMapper($c['API']);
 		});
+			
+		$this['EBookMapper'] = $this->share(function($c){
+			$result =  new EBookMapper($c['API'], $c['AuthorMapper']);
+			return $result;
+		});
+		
 		
 		$this['LibraryStorage'] = $this->share(function($c){
 			return \OCP\Files::getStorage('library');

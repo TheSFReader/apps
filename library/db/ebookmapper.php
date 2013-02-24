@@ -84,7 +84,6 @@ class EBookMapper extends Mapper {
 	public function findByPathAndUserId($path, $user){
 		$sql = 'SELECT * FROM ' . $this->tableName . ' WHERE filepath = ? and user = ?';
 		$params = array($path, $user);
-	
 		$result = $this->execute($sql, $params)->fetchRow();
 		if($result){
 			return new EBook($this->api, $result);
@@ -307,6 +306,11 @@ class EBookMapper extends Mapper {
 	 */
 	public function delete($id){
 		$this->deleteQuery($this->tableName, $id);
+		
+		// Keep the authors in the ebook's table for cache.
+		$sql = 'DELETE FROM `' . $this->authorsLinkTableName . '` WHERE `ebookid` = ?';
+		$params = array( $id);
+		$this->execute($sql, $params);
 	}
 	
 	/**
@@ -314,9 +318,16 @@ class EBookMapper extends Mapper {
 	 * @param string $path the path of the ebook he user whshes to remove
 	 */
 	public function deleteByPath($path, $user){
-		$sql = 'DELETE FROM `' . $this->tableName . '` WHERE `filepath` = ? and user = ?';
+		$this->api->log("DeleteByPath");
+		$sql = 'SELECT id FROM ' . $this->tableName . ' WHERE filepath = ? and user = ?';
 		$params = array($path, $user);
-		$this->execute($sql, $params);
+		
+		$result = $this->execute($sql, $params)->fetchRow();
+		if($result) {
+			$this->api->log($result['id'],4);
+			delete($result['id']);			
+		}
+
 	}
 	
 	

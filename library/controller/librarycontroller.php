@@ -174,9 +174,6 @@ class LibraryController extends Controller {
 		$author = $this->authorMapper->find($authorId);
 		$ebooks = $this->ebookMapper->findAllForUserAuthor($this->api->getUserId(),$authorId);
 	
-		//$sortby = $this->params('sortby');
-		//$ebooks = $this->ebookMapper->findAllForUser($this->api->getUserId(),$sortby);
-	
 		$templateName = 'author';
 		$paramsIn =  $this->getParams();
 		$routeName = $paramsIn['_route'];
