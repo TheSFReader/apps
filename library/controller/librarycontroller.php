@@ -166,7 +166,6 @@ class LibraryController extends Controller {
 	 * @return an instance of a Response implementation
 	 */
 	public function author(){
-		$this->api->log("Author",4);
 		// your own stuff
 		$this->api->addStyle('style');
 	
@@ -280,8 +279,6 @@ class LibraryController extends Controller {
 		
 		$params =  $this->getParams();
 		
-		
-		//$this->api->log(print_r($params,true));
 		if(isset($params['update'])) {
 			if(isset($params['title'])) {
 				$ebook->Title($params['title']);
@@ -338,6 +335,7 @@ class LibraryController extends Controller {
 				'ebook' => $ebook,
 				'indexLink' => $this->api->linkToRoute('library_index'),
 				'edition' => $edition,
+				'userName' => $this->api->getDisplayName(),
 		);
 		return $this->render($templateName, $params);
 		

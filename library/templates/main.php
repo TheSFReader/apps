@@ -1,3 +1,10 @@
+<div id="controls">
+	<div class="crumb svg last">
+		<a href="<?php echo $_['baseURL']; ?>">
+			{{ trans("%s's Library",userName) }}
+		</a>
+	</div>
+</div>
 <div id="app">
   <h1 class="heading">{{ trans("%s's Library",userName) }}</h1>
 
@@ -28,7 +35,7 @@
     {% endfor %}
 	</tbody>
 </table>
-{% else %}{{ trans('Empty ! You need to add some books.') }}
+{% else %}<div id="emptyfolder">{{ trans('Empty ! You need to add some books.') }}</div>
 {% endif %}
 </div>
 

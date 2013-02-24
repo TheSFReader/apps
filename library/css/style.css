@@ -67,3 +67,16 @@ table td#description { white-space:normal; }
 textarea { width:auto; }
 text#subjects {width:50em; }
 
+#emptyfolder {
+	position:absolute;
+	margin:10em 0 0 10em;
+	font-size:1.5em; font-weight:bold;
+	color:#888; text-shadow:#fff 0 1px 0;
+}
+
+/* ---- BREADCRUMB ---- */
+div.crumb { float:left; display:block; background:url('%appswebroot%/library/img/breadcrumb.svg') no-repeat right 0; padding:.75em 1.5em 0 1em; height:2.9em;  -moz-box-sizing:border-box; box-sizing:border-box; }
+div.crumb:first-child { padding:10px 20px 10px 5px; }
+div.crumb.last { font-weight:bold; background:none; padding-right:10px; }
+div.crumb a{ padding: 0.9em 0 0.7em 0; }
+

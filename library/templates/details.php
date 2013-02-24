@@ -1,3 +1,15 @@
+<div id="controls">
+	<div class="crumb svg">
+		<a href="{{ url('library_index') }}">
+			{{ trans("%s's Library",userName) }}
+		</a>
+	</div>
+	<div class="crumb svg last">
+		<a href="{{ url('library_details', {'id': ebook.getId}) }}">
+			{{ ebook.Title }}
+		</a>
+	</div>
+</div>
 <div id="app">
 	<h1 class="heading">Details</h1>
 	<a href="{{ url('library_index') }}">Library</a><BR/>

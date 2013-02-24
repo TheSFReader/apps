@@ -1,3 +1,21 @@
+<div id="controls">
+	<div class="crumb svg">
+		<a href="{{ url('library_index') }}">
+			{{ trans("%s's Library",userName) }}
+		</a>
+	</div>
+	<div class="crumb svg">
+		<a href="{{ url('library_authors') }}">
+			{{ trans("Authors") }}
+		</a>
+	</div>
+	<div class="crumb svg last">
+		<a href="{{ url('library_authors', {'author': author.getId}) }}">
+			{{ author.Name }} ({{author.NameAs}})
+		</a>
+	</div>
+</div>
+<!-- 
 <div id="app">
   <h1 class="heading">{{ author.Name }} ({{author.NameAs}})</h1>
 
@@ -6,6 +24,7 @@
 <td><a href="{{ url('library_index') }}">{{ trans("Library") }}</a></td>
 <td><a href="{{ url('library_authors') }}">{{ trans("Authors") }}</a></td>
 </tr></table>
+-->
 {% if ebooks |length > 0 %}
     <table>
 	<thead>
