@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ownCloud\n"
 "Report-Msgid-Bugs-To: http://bugs.owncloud.org/\n"
-"POT-Creation-Date: 2013-02-21 00:02+0100\n"
+"POT-Creation-Date: 2013-02-28 00:00+0100\n"
 "PO-Revision-Date: 2011-09-23 17:10+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: Burmese (Myanmar) (http://www.transifex.com/projects/p/owncloud/language/my_MM/)\n"
@@ -57,7 +57,7 @@ msgstr ""
 
 #: ajax/categories/delete.php:21
 msgid "No categories selected for deletion."
-msgstr ""
+msgstr "ဖျက်ရန်အတွက်ခေါင်းစဉ်မရွေးထားပါ"
 
 #: ajax/categories/delete.php:28
 msgid "No address books found."
@@ -97,11 +97,11 @@ msgstr ""
 msgid "Cannot save property of type \"%s\" as array"
 msgstr ""
 
-#: ajax/contact/saveproperty.php:180
+#: ajax/contact/saveproperty.php:179
 msgid "Missing IM parameter."
 msgstr ""
 
-#: ajax/contact/saveproperty.php:184
+#: ajax/contact/saveproperty.php:183
 msgid "Unknown IM: "
 msgstr ""
 
@@ -451,7 +451,7 @@ msgstr ""
 
 #: js/settings.js:99 templates/contacts.php:255 templates/settings.php:40
 msgid "Download"
-msgstr ""
+msgstr "ဒေါင်းလုတ်"
 
 #: js/settings.js:101 templates/settings.php:45
 msgid "Edit"
@@ -466,7 +466,7 @@ msgstr ""
 
 #: js/settings.js:120 templates/contacts.php:253 templates/settings.php:62
 msgid "Cancel"
-msgstr ""
+msgstr "ပယ်ဖျက်မည်"
 
 #: js/settings.js:159 templates/settings.php:66
 msgid "More..."
@@ -563,7 +563,7 @@ msgstr ""
 
 #: lib/app.php:176
 msgid "Text"
-msgstr ""
+msgstr "စာသား"
 
 #: lib/app.php:177
 msgid "Voice"
@@ -813,7 +813,7 @@ msgstr ""
 
 #: templates/contacts.php:203 templates/contacts.php:259
 msgid "Title"
-msgstr ""
+msgstr "ခေါင်းစဉ်"
 
 #: templates/contacts.php:206
 msgid "Enter title"
@@ -841,7 +841,7 @@ msgstr ""
 
 #: templates/contacts.php:257
 msgid "Add"
-msgstr ""
+msgstr "ပေါင်းထည့်"
 
 #: templates/contacts.php:262
 msgid "Phone"
@@ -1011,7 +1011,7 @@ msgstr ""
 
 #: templates/settings.php:60
 msgid "Description"
-msgstr ""
+msgstr "ဖော်ပြချက်"
 
 #: templates/settings.php:61
 msgid "Save"

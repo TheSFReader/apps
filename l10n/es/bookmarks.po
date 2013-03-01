@@ -7,15 +7,16 @@
 # Art O. Pal <artopal@fastmail.fm>, 2012.
 #   <devianpctek@gmail.com>, 2012.
 #   <juanma@kde.org.ar>, 2012.
+# Ricardo A. Hermosilla Carrillo <ra.hermosillac@gmail.com>, 2013.
 # Rubén Trujillo <rubentrf@gmail.com>, 2012.
 #   <sergio@entrecables.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: ownCloud\n"
 "Report-Msgid-Bugs-To: http://bugs.owncloud.org/\n"
-"POT-Creation-Date: 2013-02-19 09:56+0100\n"
-"PO-Revision-Date: 2013-02-19 08:57+0000\n"
-"Last-Translator: I Robot <owncloud-bot@tmit.eu>\n"
+"POT-Creation-Date: 2013-02-27 00:00+0100\n"
+"PO-Revision-Date: 2013-02-26 10:13+0000\n"
+"Last-Translator: Ricardo Hermosilla <ra.hermosillac@gmail.com>\n"
 "Language-Team: Spanish (http://www.transifex.com/projects/p/owncloud/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,7 +26,7 @@ msgstr ""
 
 #: ajax/import.php:9
 msgid "No file provided for import"
-msgstr ""
+msgstr "No se especificó un archivo para importar"
 
 #: ajax/import.php:21
 msgid "Unsupported file type for import"
@@ -57,7 +58,7 @@ msgstr "Preacucion"
 
 #: js/settings.js:18
 msgid "Import error"
-msgstr ""
+msgstr "Error de importación"
 
 #: js/settings.js:29
 msgid "Import completed successfully."
@@ -79,31 +80,31 @@ msgstr "Agregar a marcadores"
 msgid "Close"
 msgstr "cerrrar"
 
-#: templates/addBm.php:16 templates/js_tpl.php:30
+#: templates/addBm.php:16 templates/js_tpl.php:27
 msgid "The title of the page"
 msgstr "Titulo de la pagina"
 
-#: templates/addBm.php:21 templates/js_tpl.php:34
+#: templates/addBm.php:21 templates/js_tpl.php:31
 msgid "The address of the page"
 msgstr "Direccion de la pagina"
 
-#: templates/addBm.php:34 templates/js_tpl.php:43
+#: templates/addBm.php:34 templates/js_tpl.php:40
 msgid "Description of the page"
 msgstr "Descripcion de la pagina"
 
-#: templates/addBm.php:38 templates/js_tpl.php:47
+#: templates/addBm.php:38 templates/js_tpl.php:44
 msgid "Save"
 msgstr "Guardar"
 
-#: templates/js_tpl.php:6 templates/js_tpl.php:61
+#: templates/js_tpl.php:6 templates/js_tpl.php:58
 msgid "Delete"
 msgstr "Eliminar"
 
-#: templates/js_tpl.php:19 templates/js_tpl.php:57
+#: templates/js_tpl.php:14 templates/js_tpl.php:54
 msgid "Edit"
 msgstr "Editar"
 
-#: templates/js_tpl.php:46
+#: templates/js_tpl.php:43
 msgid "Cancel"
 msgstr "Cancelar"
 
